@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import StatusTarefa,tarefa
 
-# Register your models here.
+admin.site.register(StatusTarefa)
+admin.site.register(tarefa)
