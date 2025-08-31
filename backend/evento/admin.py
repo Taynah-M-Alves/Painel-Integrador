@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import statusEvento, evento
 
-# Register your models here.
+admin.site.register(statusEvento)
+admin.site.register(evento)
