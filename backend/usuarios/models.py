@@ -45,4 +45,4 @@ class ProfessorProfile(models.Model):
     user = models.OneToOneField("usuarios.User", on_delete=models.CASCADE, related_name="Professor_profile")
 
     def __str__(self):
-        return f"{self.user.username} ({self.grupo.nome if self.grupo else 'Sem grupo'})"
+        return f"{self.user.username}"

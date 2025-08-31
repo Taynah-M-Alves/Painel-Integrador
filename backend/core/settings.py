@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'tarefa',
     "usuarios.apps.UsuariosConfig",
     "grupo.apps.GrupoConfig",
+    'projIntegrador'
 ]
 
 MIDDLEWARE = [
