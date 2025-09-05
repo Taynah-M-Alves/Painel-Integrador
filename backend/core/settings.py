@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-nh=!%aky&d+xya501=$^&tocvbsybe=l=gz*2!7%)1wvc_xowe
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -48,8 +48,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -74,6 +74,15 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+'DEFAULT_AUTHENTICATION_CLASSES': (
+'rest_framework_simplejwt.authentication.JWTAuthentication',
+),
+'DEFAULT_PERMISSION_CLASSES': (
+'rest_framework.permissions.AllowAny', # troque para IsAuthenticated quando desejar proteger
+),
+}
 
 WSGI_APPLICATION = 'core.wsgi.application'
 

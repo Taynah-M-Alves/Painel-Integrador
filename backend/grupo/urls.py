@@ -1,0 +1,9 @@
+
+from django.urls import path 
+from . import views
+
+urlpatterns = [
+    path('', views.MostrarGrupos),
+    path('criar/',views.CriarGrupo, name="criar_tarefa"),
+    path('delete/<int:id>',views.ExcluirGrupo, name="excluir_grupo" ),
+]
