@@ -120,6 +120,38 @@ def AdicionarIntegrantes(request, id):
             "Integrantes Adicionados": list_adicionados,
         }, status=200)
 
+@csrf_exempt
+def DefinirLider(request, id):
+    if request.method == "PATCH":
+        grupo = get_object_or_404(Grupo, pk=id)
+        dado = json.loads(request.body)
+        lider_id = dado.get("Lider")
+
+        #Valida que está sendo informado algum integrante no json
+        if not lider_id :
+            return JsonResponse({"erro":"Nenhum integrante informado"}, status=400)
+    
+        # Salva o lider no grupo
+        try:
+            grupo.lider = User.objects.get(id=lider_id)
+            grupo.save()
+
+        except User.DoesNotExist:
+            return JsonResponse({"erro":f"Aluno {lider_id} não encontrado"}, status=400)
+            
+        list_adicionados =[
+            {"id": ad.user.id, "Nome": ad.user.username} for ad in grupo.alunos.all()
+        ] 
+        
+        return JsonResponse({
+            "id":grupo.id,
+            "Nome do Grupo":grupo.NomeGrupo,
+            "Lider do grupo": {
+                "id":grupo.lider.id,
+                "Nome":grupo.lider.username
+            },
+        }, status=200)
+
 
 @csrf_exempt
 def VerGrupoPorId(request, id):
