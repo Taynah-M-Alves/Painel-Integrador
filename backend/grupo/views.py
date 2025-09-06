@@ -89,8 +89,36 @@ def AdicionarIntegrantes(request, id):
     if request.method == "PATCH":
         grupo = get_object_or_404(Grupo, pk=id)
         dado = json.loads(request.body)
-
         integrantes_ids = dado.get("Integrantes",[])
+
+        #Valida que está sendo informado algum integrante no json
+        if not integrantes_ids :
+            return JsonResponse({"erro":"Nenhum integrante informado"}, status=400)
+        
+        #Valida que um grupo só pode ter até 5 integrantes
+        if grupo.alunos.count() + len(integrantes_ids) > 5:
+            return JsonResponse({"erro": "Um grupo não pode ter mais de 5 integrantes"}, status=400)
+
+        # Salva o grupo no AlunoProfile
+        adicionados = []
+        for user_id in integrantes_ids:
+            try:
+                aluno_profile = AlunoProfile.objects.get(user_id=user_id)
+                aluno_profile.grupo = grupo
+                aluno_profile.save()
+                adicionados.append({"id": aluno_profile.user.id, "nome": aluno_profile.user.username})
+            except AlunoProfile.DoesNotExist:
+                return JsonResponse({"erro": f"Aluno {user_id} não encontrado"}, status=400)
+            
+        list_adicionados =[
+            {"id": ad.user.id, "Nome": ad.user.username} for ad in grupo.alunos.all()
+        ] 
+        
+        return JsonResponse({
+            "id":grupo.id,
+            "Nome do Grupo":grupo.NomeGrupo,
+            "Integrantes Adicionados": list_adicionados,
+        }, status=200)
 
 
 @csrf_exempt
