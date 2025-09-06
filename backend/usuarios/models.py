@@ -36,10 +36,19 @@ class Turma(models.Model):
 
 class AlunoProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="aluno_profile")
-    grupo = models.ForeignKey(Grupo, on_delete=models.SET_NULL, null=True, blank=False, related_name="alunos")
+    grupo = models.ForeignKey(Grupo, on_delete=models.SET_NULL, null=True, blank=True, related_name="alunos")
 
     def __str__(self):
         return f"Aluno: {self.user.username}"
+    
+def save(self, *args, **kwargs):
+        # validação simples: não deixa exceder 5 integrantes
+        if self.grupo:
+            excesso = self.grupo.alunos.exclude(pk=self.pk).count() >= 5
+            if excesso:
+                from django.core.exceptions import ValidationError
+                raise ValidationError("Um grupo não pode ter mais de 5 integrantes.")
+        super().save(*args, **kwargs)
     
 class ProfessorProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="Professor_profile")

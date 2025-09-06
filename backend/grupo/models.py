@@ -9,7 +9,6 @@ User = settings.AUTH_USER_MODEL
 class Grupo(models.Model):
     NomeGrupo = models.CharField(max_length=120)
     DataCriacao = models.DateTimeField(auto_now_add=True)
-    integrantes = models.ManyToManyField(User, related_name="grupos", limit_choices_to={"role": "ALUNO"})
     lider = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -18,14 +17,14 @@ class Grupo(models.Model):
         limit_choices_to={"role": "ALUNO"},
     )
 
-   
-
     def __str__(self):
         return self.NomeGrupo
+    
+@property
+def integrantes_users(self):
+    # retorna queryset de User (evita import circular)
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    return User.objects.filter(aluno_profile__grupo=self)
 
-@receiver(m2m_changed, sender=Grupo.integrantes.through)
-def limitar_integrantes(sender, instance, action, **kwargs):
-    if action == "pre_add":
-        if instance.integrantes.count() + len(kwargs.get("pk_set", [])) > 5:
-            raise ValueError("Um grupo não pode ter mais de 5 integrantes.")
 
