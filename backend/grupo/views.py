@@ -7,21 +7,23 @@ from django.contrib.auth import get_user_model
 from usuarios.models import AlunoProfile
 from django.db import transaction
 
+
 User = get_user_model()
 
 @csrf_exempt
 def MostrarGrupos(request):
-    grupos = Grupo.objects.prefetch_related('alunos__user').all()
+    grupos = Grupo.objects.all()
     lista_grupo = []
     for g in grupos:
+        integrantesList = AlunoProfile.objects.filter( grupo = g)
         integrantes= [
-            {"id": ap.user.id, "nome": ap.user.username} for ap in g.alunos.all()
+            {"id": ap.user.id, "nome": ap.user.username} for ap in integrantesList
             ]
         lider = {"id":g.lider.id, "nome":g.lider.username} if g.lider else None
 
         lista_grupo.append({
             "id": g.id,
-            "Nome do Grupo": g.NomeGrupo,
+            "Nome_do_Grupo": g.NomeGrupo,
             "Integrantes": integrantes,
             "Lider":lider,
             "DataCriacao": g.DataCriacao.strftime("%d/%m/%Y %H:%M:%S"),
@@ -87,6 +89,7 @@ def CriarGrupo(request):
 @csrf_exempt
 def AdicionarIntegrantes(request, id):
     if request.method == "PATCH":
+
         grupo = get_object_or_404(Grupo, pk=id)
         dado = json.loads(request.body)
         integrantes_ids = dado.get("Integrantes",[])
@@ -95,23 +98,30 @@ def AdicionarIntegrantes(request, id):
         if not integrantes_ids :
             return JsonResponse({"erro":"Nenhum integrante informado"}, status=400)
         
+        integrantes_grupo = AlunoProfile.objects.filter(grupo = grupo).count()
+
         #Valida que um grupo só pode ter até 5 integrantes
-        if grupo.alunos.count() + len(integrantes_ids) > 5:
+        if integrantes_grupo + len(integrantes_ids) > 5:
             return JsonResponse({"erro": "Um grupo não pode ter mais de 5 integrantes"}, status=400)
 
         # Salva o grupo no AlunoProfile
         adicionados = []
         for user_id in integrantes_ids:
             try:
-                aluno_profile = AlunoProfile.objects.get(user_id=user_id)
+                aluno_profile = AlunoProfile.objects.get(id =user_id)
+                # Verifica se o aluno já está em outro grupo
+                if aluno_profile.grupo and aluno_profile.grupo != grupo:
+                    return JsonResponse({"erro": f"Aluno {user_id} já está em outro grupo"}, status=400)
+                
                 aluno_profile.grupo = grupo
                 aluno_profile.save()
-                adicionados.append({"id": aluno_profile.user.id, "nome": aluno_profile.user.username})
+                adicionados.append(aluno_profile)
+
             except AlunoProfile.DoesNotExist:
                 return JsonResponse({"erro": f"Aluno {user_id} não encontrado"}, status=400)
             
         list_adicionados =[
-            {"id": ad.user.id, "Nome": ad.user.username} for ad in grupo.alunos.all()
+            {"id": ad.user.id, "Nome": ad.user.username} for ad in adicionados
         ] 
         
         return JsonResponse({
@@ -119,6 +129,7 @@ def AdicionarIntegrantes(request, id):
             "Nome do Grupo":grupo.NomeGrupo,
             "Integrantes Adicionados": list_adicionados,
         }, status=200)
+    return JsonResponse({"erro": "Método não permitido"}, status=405)
 
 @csrf_exempt
 def DefinirLider(request, id):
@@ -144,9 +155,9 @@ def DefinirLider(request, id):
         ] 
         
         return JsonResponse({
-            "id":grupo.id,
-            "Nome do Grupo":grupo.NomeGrupo,
-            "Lider do grupo": {
+            "id_Grupo":grupo.id,
+            "Nome_Grupo":grupo.NomeGrupo,
+            "Lider_grupo": {
                 "id":grupo.lider.id,
                 "Nome":grupo.lider.username
             },
@@ -165,10 +176,10 @@ def VerGrupoPorId(request, id):
     return JsonResponse({
                 "id": grupo.id, 
                 "Nome do Grupo": grupo.NomeGrupo, 
-                "Data da Criação":grupo.DataCriacao.strftime("%d%m%Y, %H:%M:%S"),
+                "Data da Criação":grupo.DataCriacao.strftime("%d/%m/%Y, %H:%M:%S"),
                 "Integrantes": integrantes,
                 "Lider": lider,
             }, status=200)
 
-def ExcluirGrupo(request, id):
+def RemoverIntegrantesGrupo(request, id):
     pass

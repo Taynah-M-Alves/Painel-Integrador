@@ -1,5 +1,4 @@
 from django.db import models
-from projIntegrador.models import projIntegrador
 
 class statusEvento(models.Model):
     NomeStatusEvento = models.CharField(max_length=10)
@@ -14,7 +13,7 @@ class evento(models.Model):
     prazo = models.DateField()
     dataCriacao = models.DateTimeField(auto_now_add=True)
     statusEvento = models.ForeignKey(statusEvento, on_delete=models.SET_NULL, null=True)
-    projIntegrador = models.ForeignKey(projIntegrador, on_delete=models.SET_NULL, null=True)
+    ProjIntegrador = models.ForeignKey("projIntegrador.projIntegrador", on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f"Titulo: {self.titulo} -> Prazo: {self.prazo}"

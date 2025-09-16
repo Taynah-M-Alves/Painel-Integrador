@@ -6,7 +6,9 @@ from .models import AlunoProfile, User, ProfessorProfile
 @receiver(post_save, sender=User)
 def criar_aluno_profile(sender, instance, created, **kwargs):
     if created and instance.role == User.Roles.ALUNO:
-        AlunoProfile.objects.create(user=instance)
+        AlunoProfile.objects.create(
+            user=instance,
+            turma=instance.turma)
 
 @receiver(post_save, sender=User)
 def criar_professor_profile(sender, instance, created, **kwargs):

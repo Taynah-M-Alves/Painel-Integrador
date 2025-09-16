@@ -39,11 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'api',
     'evento',
     'tarefa',
-    "usuarios.apps.UsuariosConfig",
-    "grupo.apps.GrupoConfig",
+    "usuarios",
+    "grupo",
     'projIntegrador'
 ]
 
