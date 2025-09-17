@@ -5,7 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth import get_user_model
 from usuarios.models import AlunoProfile
-from django.db import transaction
+
+
 
 
 User = get_user_model()
@@ -183,3 +184,6 @@ def VerGrupoPorId(request, id):
 
 def RemoverIntegrantesGrupo(request, id):
     pass
+
+
+

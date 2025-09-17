@@ -9,10 +9,10 @@ from django.dispatch import receiver
 User = settings.AUTH_USER_MODEL
 
 class Grupo(models.Model):
-    NomeGrupo = models.CharField(max_length=120)
-    ProjetoIntegrador = models.ForeignKey("projIntegrador.ProjIntegrador", on_delete=models.CASCADE, null= False, blank=True, related_name="ProjetoIntegrador")
-    DataCriacao = models.DateTimeField(auto_now_add=True)
-    lider = models.ForeignKey(
+    nome_grupo = models.CharField(max_length=120)
+    projeto_integrador_id = models.ForeignKey("projIntegrador.ProjIntegrador", on_delete=models.CASCADE, null= False, blank=True, related_name="ProjetoIntegrador")
+    data_criacao = models.DateTimeField(auto_now_add=True)
+    lider_id = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True, blank=True,
@@ -21,7 +21,7 @@ class Grupo(models.Model):
     )
 
     def __str__(self):
-        return self.NomeGrupo
+        return self.nome_grupo
     
 @property
 def integrantes_users(self):

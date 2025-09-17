@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'tarefa',
     "usuarios",
     "grupo",
-    'projIntegrador'
+    'projIntegrador',
+    'rest_framework_swagger',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -76,11 +78,12 @@ TEMPLATES = [
 
 REST_FRAMEWORK = {
 'DEFAULT_AUTHENTICATION_CLASSES': (
-'rest_framework_simplejwt.authentication.JWTAuthentication',
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
 ),
 'DEFAULT_PERMISSION_CLASSES': (
-'rest_framework.permissions.AllowAny', # troque para IsAuthenticated quando desejar proteger
+    'rest_framework.permissions.AllowAny', # troque para IsAuthenticated quando desejar proteger
 ),
+'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 WSGI_APPLICATION = 'core.wsgi.application'
@@ -147,3 +150,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
