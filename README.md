@@ -5,7 +5,13 @@
 1. Baixe o git e o Python.
 2. Abra o terminal na pasta na qual deseja abrir o arquivo.
 3. Clone o repositorio:   
-``git clone https://github.com/Taynah-M-Alves/Painel-Integrador.git``
+```bash
+git clone https://github.com/Taynah-M-Alves/Painel-Integrador.git
+```
+4. Instale as dependências:
+```bash
+    pip install -r requirements.txt
+```
 
 ## Configurando o banco de dados:
 1.   Crie as migrations :    
