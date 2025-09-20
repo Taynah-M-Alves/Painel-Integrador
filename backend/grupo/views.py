@@ -51,11 +51,13 @@ def CriarGrupo(request):
 
             integrantes = dados.get("Integrantes")
             try:
+                integrantes_list = []
                 if len(integrantes) <= 5:
                     for integ in integrantes:
                         aluno = get_object_or_404(AlunoProfile, id=integ)
                         aluno.grupo_id = grupo
                         aluno.save()
+                        integrantes_list.append(aluno)
 
             except Exception as e:
                 return JsonResponse({"erro": str(e)}, status=400)
@@ -71,6 +73,8 @@ def CriarGrupo(request):
                     return JsonResponse({"erro":"O lider tem que ser um dos integrantes!"})
             except Exception as e:
                 return JsonResponse({"erro": str(e)}, status=400)
+            
+            integrantes_formatacao = [{"id":integ.id, "Nome":integ.user_id.username}for integ in integrantes_list]
 
             return JsonResponse({"Grupo_criado":{
                 "id":grupo.id,
@@ -78,109 +82,104 @@ def CriarGrupo(request):
                 "Lider":{
                     "id": grupo.lider_id.id,
                     "Nome":grupo.lider_id.user_id.username
-                }
+                },
+                "integrantes":integrantes_formatacao
             }}, status=200)
         
         except Exception as e:
             return JsonResponse({"erro": str(e)}, status=400)
-    else:
-        return JsonResponse({"erro": "O metodo chamado está inválido!"})    
-
-
-# @csrf_exempt
-# def AdicionarIntegrantes(request, id):
-#     if request.method == "PATCH":
-
-#         grupo = get_object_or_404(Grupo, pk=id)
-#         dado = json.loads(request.body)
-#         integrantes_ids = dado.get("Integrantes",[])
-
-#         #Valida que está sendo informado algum integrante no json
-#         if not integrantes_ids :
-#             return JsonResponse({"erro":"Nenhum integrante informado"}, status=400)
         
-#         integrantes_grupo = AlunoProfile.objects.filter(grupo = grupo).count()
+    return JsonResponse({"erro": "Método não permitido"}, status=405)  
 
-#         #Valida que um grupo só pode ter até 5 integrantes
-#         if integrantes_grupo + len(integrantes_ids) > 5:
-#             return JsonResponse({"erro": "Um grupo não pode ter mais de 5 integrantes"}, status=400)
 
-#         # Salva o grupo no AlunoProfile
-#         adicionados = []
-#         for user_id in integrantes_ids:
-#             try:
-#                 aluno_profile = AlunoProfile.objects.get(id =user_id)
-#                 # Verifica se o aluno já está em outro grupo
-#                 if aluno_profile.grupo and aluno_profile.grupo != grupo:
-#                     return JsonResponse({"erro": f"Aluno {user_id} já está em outro grupo"}, status=400)
+@csrf_exempt
+def AdicionarIntegrantes(request, id):
+    if request.method == "PATCH":
+
+        grupo = get_object_or_404(Grupo, pk=id)
+        dado = json.loads(request.body)
+        integrantes_ids = dado.get("Integrantes",[])
+
+        #Valida que está sendo informado algum integrante no json
+        if not integrantes_ids :
+            return JsonResponse({"erro":"Nenhum integrante informado"}, status=400)
+        
+        integrantes_grupo = AlunoProfile.objects.filter(grupo_id = grupo).count()
+
+        #Valida que um grupo só pode ter até 5 integrantes
+        if integrantes_grupo + len(integrantes_ids) > 5:
+            return JsonResponse({"erro": "Um grupo não pode ter mais de 5 integrantes"}, status=400)
+
+        # Salva o grupo no AlunoProfile
+        adicionados = []
+        for user_id in integrantes_ids:
+            try:
+                aluno_profile = AlunoProfile.objects.get(id =user_id)
+                # Verifica se o aluno já está em outro grupo
+                if aluno_profile.grupo_id and aluno_profile.grupo_id != grupo:
+                    return JsonResponse({"erro": f"Aluno {user_id} já está em outro grupo"}, status=400)
                 
-#                 aluno_profile.grupo = grupo
-#                 aluno_profile.save()
-#                 adicionados.append(aluno_profile)
+                aluno_profile.grupo_id = grupo
+                aluno_profile.save()
+                adicionados.append(aluno_profile)
 
-#             except AlunoProfile.DoesNotExist:
-#                 return JsonResponse({"erro": f"Aluno {user_id} não encontrado"}, status=400)
+            except AlunoProfile.DoesNotExist:
+                return JsonResponse({"erro": f"Aluno {user_id} não encontrado"}, status=400)
             
-#         list_adicionados =[
-#             {"id": ad.user.id, "Nome": ad.user.username} for ad in adicionados
-#         ] 
+        list_adicionados =[
+            {"id": ad.user_id.id, "Nome": ad.user_id.username} for ad in adicionados
+        ] 
         
-#         return JsonResponse({
-#             "id":grupo.id,
-#             "Nome do Grupo":grupo.NomeGrupo,
-#             "Integrantes Adicionados": list_adicionados,
-#         }, status=200)
-#     return JsonResponse({"erro": "Método não permitido"}, status=405)
+        return JsonResponse({
+            "id":grupo.id,
+            "Nome do Grupo":grupo.nome_grupo,
+            "Integrantes Adicionados": list_adicionados,
+        }, status=200)
+    return JsonResponse({"erro": "Método não permitido"}, status=405)
 
-# @csrf_exempt
-# def DefinirLider(request, id):
-#     if request.method == "PATCH":
-#         grupo = get_object_or_404(Grupo, pk=id)
-#         dado = json.loads(request.body)
-#         lider_id = dado.get("Lider")
+@csrf_exempt
+def DefinirLider(request,id):
+    if request.method == "PATCH":
+        try:
+            grupo = get_object_or_404(Grupo, pk=id)
+            dado = json.loads(request.body)
+            liderReq = dado.get("Lider")
 
-#         #Valida que está sendo informado algum integrante no json
-#         if not lider_id :
-#             return JsonResponse({"erro":"Nenhum integrante informado"}, status=400)
-    
-#         # Salva o lider no grupo
-#         try:
-#             grupo.lider = User.objects.get(id=lider_id)
-#             grupo.save()
-
-#         except User.DoesNotExist:
-#             return JsonResponse({"erro":f"Aluno {lider_id} não encontrado"}, status=400)
+            liderDoGrupo = get_object_or_404(AlunoProfile, pk=liderReq)
             
-#         list_adicionados =[
-#             {"id": ad.user.id, "Nome": ad.user.username} for ad in grupo.alunos.all()
-#         ] 
+            grupo.lider_id = liderDoGrupo
+            grupo.save()
+
+            return JsonResponse({
+                "id_Grupo":grupo.id,
+                "Nome_Grupo":grupo.nome_grupo,
+                "Lider_grupo": {
+                    "id":grupo.lider_id.id,
+                    "Nome":grupo.lider_id.user_id.username,
+                },
+            }, status=200)
+        except Exception as e:
+            return JsonResponse({"erro":str(e)})
         
-#         return JsonResponse({
-#             "id_Grupo":grupo.id,
-#             "Nome_Grupo":grupo.NomeGrupo,
-#             "Lider_grupo": {
-#                 "id":grupo.lider.id,
-#                 "Nome":grupo.lider.username
-#             },
-#         }, status=200)
+    return JsonResponse({"erro": "Metodo não permitido"},status=400)
 
 
-# @csrf_exempt
-# def VerGrupoPorId(request, id):
-#     grupo = get_object_or_404(Grupo, pk=id)
+@csrf_exempt
+def VerGrupoPorId(request, id):
+    grupo = get_object_or_404(Grupo, pk=id)
 
-#     integrantes= [
-#         {"id": ap.user.id, "nome": ap.user.username} for ap in grupo.alunos.all()
-#             ]
-#     lider = {"id":grupo.lider.id, "nome":grupo.lider.username} if grupo.lider else None
+    integrantes= [
+        {"id": ap.user_id.id, "nome": ap.user_id.username} for ap in grupo.alunos.all()
+            ]
+    lider = {"id":grupo.lider_id.id, "nome":grupo.lider_id.username} if grupo.lider_id else None
 
-#     return JsonResponse({
-#                 "id": grupo.id, 
-#                 "Nome do Grupo": grupo.NomeGrupo, 
-#                 "Data da Criação":grupo.DataCriacao.strftime("%d/%m/%Y, %H:%M:%S"),
-#                 "Integrantes": integrantes,
-#                 "Lider": lider,
-#             }, status=200)
+    return JsonResponse({
+                "id": grupo.id, 
+                "Nome do Grupo": grupo.nome_grupo, 
+                "Data da Criação":grupo.data_criacao.strftime("%d/%m/%Y, %H:%M:%S"),
+                "Integrantes": integrantes,
+                "Lider": lider,
+            }, status=200)
 
 # def RemoverIntegrantesGrupo(request, id):
 #     pass
