@@ -33,12 +33,14 @@ class User(AbstractUser):
         return self.role == self.Roles.PROFESSOR
     
     def clean(self):
+        super().clean()
          # Validação: se for aluno, turma é obrigatória
-        if self.role == self.Roles.ALUNO and self.turma is None:
+        if self.role == self.Roles.ALUNO and not self.turma_id:
             raise ValidationError({"turma": "Alunos devem estar vinculados a uma turma."})
         
     def save(self, *args, **kwargs):
-        self.full_clean()
+        if not kwargs.get("update_fields"):
+            self.full_clean()
         super().save(*args, **kwargs)
       
 
@@ -49,8 +51,8 @@ class AlunoProfile(models.Model):
 
     def save(self, *args, **kwargs):
         # validação simples: não deixa exceder 5 integrantes
-        if self.grupo:
-            excesso = self.grupo.alunos.exclude(pk=self.pk).count() >= 5
+        if self.grupo_id:
+            excesso = self.grupo_id.alunos.exclude(pk=self.pk).count() >= 5
             if excesso:
                 from django.core.exceptions import ValidationError
                 raise ValidationError("Um grupo não pode ter mais de 5 integrantes.")

@@ -5,5 +5,5 @@ from . import views
 urlpatterns = [
     path('', views.MostrarProjetos),
     path('criar/',views.CriarProjeto, name="criar_projetos"),
-    path('ver/<int:id>',views.VerGrupoPorProjeto, name="ver_grupos_projeto" ),
+    path('verporid/<int:id>',views.VerGrupoPorProjeto, name="ver_grupos_projeto" ),
 ]

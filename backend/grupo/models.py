@@ -1,10 +1,7 @@
 from django.db import models
 from django.conf import settings
-from django.core.exceptions import ValidationError
-from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
-
-
+from usuarios.models import AlunoProfile
 
 User = settings.AUTH_USER_MODEL
 
@@ -13,11 +10,10 @@ class Grupo(models.Model):
     projeto_integrador_id = models.ForeignKey("projIntegrador.ProjIntegrador", on_delete=models.CASCADE, null= False, blank=True, related_name="ProjetoIntegrador")
     data_criacao = models.DateTimeField(auto_now_add=True)
     lider_id = models.ForeignKey(
-        User,
+        AlunoProfile,
         on_delete=models.SET_NULL,
         null=True, blank=True,
         related_name="lideranca",
-        limit_choices_to={"role": "ALUNO"},
     )
 
     def __str__(self):
@@ -28,6 +24,6 @@ def integrantes_users(self):
     # retorna queryset de User (evita import circular)
     from django.contrib.auth import get_user_model
     User = get_user_model()
-    return User.objects.filter(aluno_profile__grupo=self)
+    return User.objects.filter(aluno_profile__grupo_id=self)
 
 

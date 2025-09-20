@@ -9,31 +9,31 @@ import json
 @csrf_exempt
 def MostrarProjetos(request):
     projetos = projIntegrador.objects.all()
-    projeto_list = [{"id":p.id, "Tema": p.Tema, "Turma": p.turma.NomeTurma, "Professor":p.professor.user.username } for p in projetos]
+    projeto_list = [{"id":p.id, "Tema": p.tema, "Turma": p.turma_id.nome_turma, "Professor":p.professor_id.user_id.username } for p in projetos]
 
     return JsonResponse({"Projetos": projeto_list}, status=200)
 
 @csrf_exempt
 def VerGrupoPorProjeto(request, id):
     gruposSalvos = Grupo.objects.all()
-    grupos = get_list_or_404(gruposSalvos, ProjetoIntegrador=id)
+    grupos = get_list_or_404(gruposSalvos, projeto_integrador_id_id=id)
     lista_grupo=[]
 
 
     for gp in grupos:
-        integrantes= AlunoProfile.objects.filter(grupo=gp)
+        integrantes= AlunoProfile.objects.filter(grupo_id=gp)
         integrantes_list= [
-            {"id": ap.user.id, "nome": ap.user.username} for ap in integrantes
+            {"id": ap.user_id.id, "nome": ap.user_id.username} for ap in integrantes
             ]
-        lider = {"id":gp.lider.id, "nome":gp.lider.username} if gp.lider else None
+        lider = {"id":gp.lider_id.id, "nome":gp.lider_id.username} if gp.lider_id else None
 
 
         lista_grupo.append({
             "id": gp.id,
-            "Nome do Grupo": gp.NomeGrupo,
+            "Nome do Grupo": gp.nome_grupo,
             "Integrantes": integrantes_list,
             "Lider":lider,
-            "DataCriacao": gp.DataCriacao.strftime("%d/%m/%Y"),
+            "DataCriacao": gp.data_criacao.strftime("%d/%m/%Y"),
         })
 
     return JsonResponse({"grupos":lista_grupo}, status=200)
@@ -51,25 +51,19 @@ def CriarProjeto(request):
             turmaReq = get_object_or_404(Turma, id=turma_id)
             professor = get_object_or_404(ProfessorProfile, id=professor_id)
             
-                
-            if not turmaReq:
-                return JsonResponse({"erro":"Turma não encontrada"}, status=400)
-
-            if not professor_id:
-                return JsonResponse({"erro":"Professor não encontrado"}, status=400)
 
             projeto = projIntegrador.objects.create(
-                Tema = dados.get("Tema"),
-                turma = turmaReq,
-                professor = professor
+                tema = dados.get("Tema"),
+                turma_id = turmaReq,
+                professor_id = professor
             )
             
             
             return JsonResponse({"Projeto_Criado":{
                                  "id":projeto.id,
-                                 "Tema":projeto.Tema,
-                                 "Turma":projeto.turma.NomeTurma,
-                                 "Professor":projeto.professor.user.username
+                                 "Tema":projeto.tema,
+                                 "Turma":projeto.turma_id.nome_turma,
+                                 "Professor":projeto.professor_id.user_id.username
                                  }}, status=200)
 
         except Exception as e:

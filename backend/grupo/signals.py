@@ -8,4 +8,4 @@ def atualizar_grupo_aluno_profile(sender, instance, created, **kwargs):
     if created:
         # Atualiza todos os alunos do grupo de uma vez
         AlunoProfile.objects.filter(id__in=[aluno.id for aluno in instance.alunos.all()]) \
-                            .update(grupo=instance)
+                            .update(grupo_id=instance)
