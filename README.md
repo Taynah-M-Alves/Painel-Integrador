@@ -16,11 +16,15 @@ git clone https://github.com/Taynah-M-Alves/Painel-Integrador.git
 ## Configurando o banco de dados:
 1.   Crie as migrations :    
     No terminal, navegue até a pasta onde está a aplicação python e execute o comando:    
-      ``python manage.py makemigrations``
+      ```bash
+     python manage.py makemigrations
+      ```
      
 3. Migrate:    
    Ainda no mesmo terminal execute:     
-   ``python manage.py migrate``
+   ```bash
+   python manage.py migrate
+   ```
    
 # ROTAS:
 ### Usuarios:
@@ -33,6 +37,13 @@ git clone https://github.com/Taynah-M-Alves/Painel-Integrador.git
 
 - POST --> '/projetos/criar/'
 - GET -->  '/projetos/'  
-    <sub>Ver todos os projetos Integradores </sub>
-- GET -->  '/projetos/ver/<int:id>'  
-  <sub>Ver o projeto da id passada na requesição</sub>
+  <sub>Ver todos os projetos Integradores </sub>
+- GET -->  '/projetos/verporid/ [<int:id>]  '
+  <sub>Ver os grupos do projeto id passada na requisição</sub>
+
+### Grupo:
+
+- GET --> 'grupo/'
+- POST --> 'grupo/criar/'
+- PATCH --> 'grupo/adicionarIntegrante/[<int:id>]'
+- PATCH --> 'atribuirLideranca/[<int:id>]'
