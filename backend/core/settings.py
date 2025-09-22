@@ -41,11 +41,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'evento',
     'tarefa',
-    "usuarios",
+    'usuarios',
     "grupo",
     'projIntegrador',
-    'rest_framework_swagger',
-    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -83,7 +81,6 @@ REST_FRAMEWORK = {
 'DEFAULT_PERMISSION_CLASSES': (
     'rest_framework.permissions.AllowAny', # troque para IsAuthenticated quando desejar proteger
 ),
-'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 WSGI_APPLICATION = 'core.wsgi.application'
@@ -156,5 +153,4 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Your project description',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    # OTHER SETTINGS
 }
