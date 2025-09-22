@@ -1,79 +1,95 @@
-# PAINEL INTEGRADOR
+🎯 Objetivo do Projeto:
+Desenvolver uma aplicação web progressiva (PWA) como extensão do site da faculdade, com o propósito de gerenciar e documentar as etapas dos Projetos Integradores realizados pelos alunos, proporcionando um ambiente centralizado de organização, acompanhamento e colaboração entre alunos e professores.
+________________________________________
+❗ Problema que o Projeto Busca Sanar:
+•	Desorganização e falta de rastreabilidade das etapas dos projetos integradores;
+•	Ausência de uma plataforma unificada para distribuição de tarefas e entregas entre alunos e professores;
+•	Dificuldade no acompanhamento de prazos, metas e status das tarefas;
+•	Falta de clareza no papel de cada integrante do grupo e ausência de liderança formal;
+•	Inexistência de um repositório de entregas por grupo que mostre o histórico e penalidades por atraso.
+________________________________________
+📋 Regras de Negócio:
+1.	Formação de Grupos:
+o	Cada grupo terá no máximo 5 integrantes.
+o	Os grupos são formados e atribuídos pelo professor da disciplina.
+2.	Entregas/Eventos:
+o	Professores podem criar eventos/entregas com:
+	Descrição
+	Prazo de entrega
+	Tipo de arquivo exigido
+o	Esses eventos/entregas são globais, isso é, o professor cria um evento que será aplicado para todos os grupos do projeto Integrador respectivo
 
-## Clonar o Projeto e Instalar as dependências:
+3.	Tarefas:
+o	Podem ser criadas:
+	Pelo professor, para um grupo;
+	Pelo líder do grupo, apenas para seu grupo.
+o	Devem conter:
+	Descrição
+	Responsável (no caso de tarefas internas do grupo)
+	Prazo
+	Tipo de arquivo (opcional)
+o	Tarefas terão status: em aguardo, em execução, concluída, atrasada.
+4.	Status de Tarefa:
+o	Alterações de status podem depender da entrega de arquivos.
+o	Tarefas entregues após o prazo terão status atrasada.
+o	É permitido adicionar arquivos, mas não substituir nem excluir entregas anteriores.
+5.	Permissões de Edição:
+o	Alunos e professores não podem apagar entregas.
+o	Apenas professores podem atribuir ou remover o cargo de líder do grupo.
+________________________________________
+👤 Funcionalidades por Tipo de Usuário:
+👨‍🏫 Professor:
+•	Visualizar alunos da disciplina e formar grupos (máx. 5 integrantes).
+•	Atribuir/remover a função de líder a um aluno do grupo.
+•	Criar tarefas para:
+o	Um grupo específico
+o	Toda a turma
+•	Criar entregas/eventos com prazos e descrições.
+•	Acompanhar:
+o	Progresso de tarefas dos grupos
+o	Entregas realizadas e atrasadas
+o	Cronogramas dos grupos
+________________________________________
+👩‍🎓 Líder do Grupo:
+•	Criar tarefas internas do grupo com:
+o	Descrição
+o	Prazo
+o	Responsável
+•	Visualizar e gerenciar (não apagar) tarefas do grupo.
+•	Submeter arquivos de entrega.
+•	Acompanhar metas, eventos, cronograma e tarefas.
+________________________________________
+👥 Aluno:
+•	Visualizar:
+o	Tarefas do grupo
+o	Tarefas atribuídas a si
+o	Eventos/entregas
+o	Cronograma, temática e problematização do projeto
+•	Entregar arquivos dentro dos prazos estabelecidos.
+•	Acompanhar status das tarefas e entregas.
+________________________________________
+📌 Funcionalidades Gerais (Sistema):
+•	Painel do Grupo:
+o	Tarefas do grupo
+o	Tarefas do usuário logado
+o	Metas
+o	Eventos/Entregas
+o	Cronograma
+o	Temática e problematização do projeto
+o	Número e identificação do grupo
+•	Gerenciamento de Tarefas:
+o	Criação de tarefas com:
+	Descrição
+	Responsável
+	Prazo
+	Status
+	Upload de arquivos
+o	Alteração de status condicionada ao envio de arquivos
+o	Detecção automática de atraso
+•	Sistema de Entregas:
+o	Upload de múltiplos arquivos sem sobrescrever anteriores
+o	Registro de data e hora da entrega
+•	Controle de Permissões:
+o	Restrições de exclusão de entregas
+o	Controle sobre criação de tarefas por tipo de usuário
 
-1. Baixe o git , Python e SQLite.
-2. Abra o terminal na pasta na qual deseja abrir o arquivo.
-3. Clone o repositorio:   
-```bash
-git clone https://github.com/Taynah-M-Alves/Painel-Integrador.git
-```
-4. Instale as dependências:
-```bash
-    pip install -r requirements.txt
-```
-
-## Configurando o banco de dados:
-1. Crie as migrations :    
-    No terminal, navegue até a pasta onde está a aplicação python e execute o comando:    
-      ```bash
-     python manage.py makemigrations
-      ```
-     
-3. Migrate:    
-   Ainda no mesmo terminal execute:     
-   ```bash
-   python manage.py migrate
-   ```
-   ## Execute o Server:
-
-1. Crie um super user:      
-    ```bash
-    python manage.py createsuperuser
-    ```
-   
-2.Rodar o Server:
-    ```bash
-    python manage.py runserver
-    ```
-
-3. "Visualizar" o backend:    
-   Acesse o link que aparece no terminal ao executar o runserver e acesse a rota '/admin' para visualizar o painel administrador do projeto.
-
-   *OU*
-
-   Acesse o POSTMAN através do link 
-    ```bash
-   https://taynah.postman.co/workspace/My-Workspace~22fac5d5-f2c7-451f-86a4-9c1bc1697b70/collection/44803258-40cdfd56-1469-46fb-9bbb-90ef921c994a?action=share&creator=44803258
-    ```
-# ROTAS:
-### Usuarios:
-
-- GET -->  / usuarios/ professores   
- <sub>Mostra todos os professores criados</sub> 
-- GET --> /usuarios / alunos   
-  <sub>Mostra todos os alunos criados</sub> 
-- GET --> /usuarios / turmas   
-  <sub>Mostra todos as turmas criados</sub> 
-
-### Projeto Integrador:
-
-- GET -->  /projetos/   
-  <sub>Mostra todos os projetos criados</sub>  
-- POST --> /projetos/   
-  <sub>Cria os projetos</sub>
-- GET -->  /projetos/ < int:id >   
-  <sub>Ver os grupos do projeto id passada na requisição</sub>
-
-### Grupo:
-
-- GET --> grupos/   
-  <sub>Mostra todos os grupos criados</sub> 
-- POST --> grupos/   
-  <sub>Cria grupos</sub>
-- GET --> grupos/< int:id >   
-  <sub>Mostra o projeto da id passada na requisição</sub> 
-- PATCH --> 'grupos/< int:id > /adicionar-integrante   
-  <sub> Adiciona um integrante ao grupo da id passada na requisição</sub>
-- PATCH --> grupos/< int:id > / atribuir-lideranca
-  <sub>atribui lideranca a um integrante do grupo da id passada na requisição</sub>   
