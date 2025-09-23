@@ -78,5 +78,12 @@ git clone https://github.com/Taynah-M-Alves/Painel-Integrador.git
   <sub>Mostra o projeto da id passada na requisição</sub> 
 - PATCH --> 'grupos/< int:id > /adicionar-integrante   
   <sub> Adiciona um integrante ao grupo da id passada na requisição</sub>
-- PATCH --> grupos/< int:id > / atribuir-lideranca
+- PATCH --> grupos/< int:id > / atribuir-lideranca    
   <sub>atribui lideranca a um integrante do grupo da id passada na requisição</sub>   
+
+  ### Evento:
+
+- GET --> eventos/   
+  <sub>Mostra todos os eventos criados</sub> 
+- POST --> eventos/   
+  <sub>Cria eventos</sub>
