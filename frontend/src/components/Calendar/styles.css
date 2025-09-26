@@ -1,0 +1,12 @@
+.rdp-root {
+  --rdp-accent-color: red; /* Change the accent color to indigo. */
+  --rdp-accent-background-color: #000000; /* Change the accent background color. */
+  background-color: white;
+  padding: 38px;
+}
+
+.rdp-day {
+  width: var(--rdp-day-width);
+  height: var(--rdp-day-height);
+  text-align: center;
+}
