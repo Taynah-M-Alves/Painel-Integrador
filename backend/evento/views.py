@@ -15,10 +15,10 @@ def criar_visualizar_evento(request):
                 "Titulo":ev.titulo,
                 "Descricao":ev.descricao,
                 "Data_Criada":ev.data_criacao.strftime("%d-%m-%y %H:%M:%S"),
-                "Projeto":ev.projeto_integrador.tema,
+                "Prazo":ev.prazo,
                 "Status":ev.status_evento.nome_status}for ev in eventos]
             
-            return JsonResponse({"Eventos":eventos_list}, status=200)
+            return JsonResponse(eventos_list, status=200, safe=False)
         except Exception as e:
             return JsonResponse({"erro": str(e)})
         
@@ -30,16 +30,13 @@ def criar_visualizar_evento(request):
             titulo_req = dados.get("Titulo")
             descricao_req = dados.get("Descricao")
             prazo_req = dados.get("Prazo")
-            projeto_req = dados.get("Projeto_Integrador")
-
-            projeto_object = get_object_or_404(projIntegrador, id = projeto_req)
+        
             status_object = get_object_or_404(StatusEvento, id = 1)
 
             evento = Evento.objects.create(
                 titulo = titulo_req,
                 descricao = descricao_req,
                 prazo = prazo_req,
-                projeto_integrador = projeto_object,
                 status_evento = status_object
             )
 
@@ -47,7 +44,6 @@ def criar_visualizar_evento(request):
                 "Titulo":evento.titulo,
                 "Descricao":evento.descricao,
                 "Data_Criada":evento.data_criacao.strftime("%d-%m-%y %H:%M:%S"),
-                "Projeto":evento.projeto_integrador.tema,
                 "Status":evento.status_evento.nome_status})
 
         except Exception as e:

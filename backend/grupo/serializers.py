@@ -4,4 +4,4 @@ from .models import Grupo
 class GrupoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grupo
-        fields = ["id", "NomeGrupo"]
+        fields = '__all__'

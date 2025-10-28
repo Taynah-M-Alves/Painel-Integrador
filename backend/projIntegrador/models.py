@@ -8,4 +8,6 @@ class projIntegrador(models.Model):
     turma = models.ForeignKey(Turma, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return f"Tema: {self.tema} - Professor: {self.professor}"
+        professor_nome = self.professor.user.username if self.professor else "Sem professor"
+        turma_nome = self.turma.nome_turma if self.turma else "Sem turma"
+        return f"Tema: {self.tema} - Professor: {professor_nome} - Turma: {turma_nome}"

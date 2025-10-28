@@ -39,6 +39,25 @@ def mostrar_alunos(request):
     return JsonResponse({"erro":"Método não permitido. Use GET"}, status=405)
 
 @csrf_exempt
+def mostrar_alunos_sem_grupo(request):
+    if request.method == 'GET':
+
+        alunos = AlunoProfile.objects.filter(grupo__isnull=True)
+        alunos_list = [
+            {
+                "Id_Aluno": ap.id,
+                "Nome_Aluno": ap.user.username,
+                "Role": ap.user.role,
+                "Turma": ap.turma.nome_turma if ap.turma else None,
+            }
+            for ap in alunos.order_by("id")
+        ]
+
+        return JsonResponse(alunos_list,safe=False, status=200)
+    
+    return JsonResponse({"erro":"Método não permitido. Use GET"}, status=405)
+
+@csrf_exempt
 def mostrar_professores(request):
     if request.method == 'GET':
 

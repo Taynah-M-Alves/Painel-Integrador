@@ -1,56 +1,63 @@
 from django.shortcuts import get_list_or_404, get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
 from .models import projIntegrador
 from django.http import JsonResponse, Http404
 from grupo.models import Grupo
+from .serializers import ProjetoSerializer
 from usuarios.models import AlunoProfile, Turma, ProfessorProfile
+from rest_framework import viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 import json
 
-@csrf_exempt
+
+@api_view(['GET', 'POST'])
 def criar_visualizar_projetos(request):
     if request.method == 'GET':
-        projetos = projIntegrador.objects.all()
-        projeto_list = [{"id":p.id, "Tema": p.tema, "Turma": p.turma.nome_turma, "Professor":p.professor.user.username } for p in projetos]
+        projetos = projIntegrador.objects.all().order_by('id')
+        serializer = ProjetoSerializer(projetos, many=True)
 
-        return JsonResponse({"Projetos": projeto_list}, status=200)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif request.method == 'POST':
 
-        try:
-            dados = json.loads(request.body)
-            turma_req = dados.get("Turma")
-            professor_req= dados.get("Professor")
-
-           
-            turma_object = get_object_or_404(Turma, id=turma_req)
-            professor_object = get_object_or_404(ProfessorProfile, id=professor_req)
-            
-
-            projeto = projIntegrador.objects.create(
-                tema = dados.get("Tema"),
-                turma = turma_object,
-                professor = professor_object
-            )
-            
-            
-            return JsonResponse({"Projeto_Criado":{
-                                 "id":projeto.id,
-                                 "Tema":projeto.tema,
-                                 "Turma":projeto.turma.nome_turma,
-                                 "Professor":projeto.professor.user.username
-                                 }}, status=200)
-
-        except Exception as e:
-            return JsonResponse({"erro": str(e)}, status=400)
+        serializer = ProjetoSerializer(data=request.data)
+        if serializer.is_valid():
+            projeto = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    else:
-        return JsonResponse({"erro": "Método não permitido. Use GET para ver os projetos e POST para cria-los"}, status=405)
 
-@csrf_exempt
+@api_view(['GET'])
+def ver_projeto_por_id(request, id):
+    try:
+        # Tenta buscar o projeto pelo ID, ou retorna 404 automaticamente
+        project = get_object_or_404(projIntegrador, pk=id)
+
+        professor =  project.professor
+        turma =  project.turma
+
+        professor_data = {"id": professor.id, "nome":professor.user.username} if professor else None
+
+        turma_data = {"id": turma.id, "nome":turma.nome_turma} if turma else None
+
+        project_data={
+                    "id": project.id,
+                    "tema": project.tema,
+                    "descricao": project.descricao,
+                    "professor":professor_data,
+                    "turma": turma_data,
+                }
+    
+        return JsonResponse(project_data, status=200)
+        
+    except Exception as e:
+        # Caso ocorra algum outro erro inesperado
+        return JsonResponse({"erro": f"Erro interno: {str(e)}"}, status=500)
+    
+
+@api_view(['GET'])
 def ver_grupos_por_projeto(request, id):
-    if request.method == 'GET':
-       
-
         try:
 
             grupos = get_list_or_404(Grupo, projeto_integrador=id)
@@ -66,16 +73,15 @@ def ver_grupos_por_projeto(request, id):
 
                 lista_grupo.append({
                     "id": gp.id,
-                    "Nome do Grupo": gp.nome_grupo,
+                    "Nome_Grupo": gp.nome_grupo,
                     "Integrantes": integrantes_list,
                     "Lider":lider,
                     "DataCriacao": gp.data_criacao.strftime("%d/%m/%Y"),
                 })
 
-            return JsonResponse({"grupos":lista_grupo}, status=200)
+            return JsonResponse(lista_grupo, status=200,safe=False)
         
         except Http404:
             return JsonResponse ({"erro":"Não tem nenhum grupo associado a esse projeto"}, status=404) 
         
-    return JsonResponse({"erro":"Metódo Inválido. Use o método GET"}, status=405)
 

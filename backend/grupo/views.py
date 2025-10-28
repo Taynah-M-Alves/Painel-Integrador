@@ -6,6 +6,8 @@ import json
 from django.contrib.auth import get_user_model
 from usuarios.models import AlunoProfile
 from projIntegrador.models import projIntegrador
+from .serializers import GrupoSerializer
+from rest_framework import viewsets
 
 
 User = get_user_model()
@@ -31,6 +33,8 @@ def criar_visualizar_grupos(request):
                 "DataCriacao": g.data_criacao.strftime("%d/%m/%Y %H:%M:%S"),
             })
         return JsonResponse({"grupos":lista_grupo}, status=200)
+    
+        
     elif request.method == 'POST':
 
         try:
@@ -46,7 +50,7 @@ def criar_visualizar_grupos(request):
                 projeto_integrador = projeto
             )
 
-            integrantes = dados.get("Integrantes")
+            integrantes = dados.get("Integrantes",[])
             try:
                 integrantes_list = []
                 if len(integrantes) <= 5:
@@ -61,27 +65,30 @@ def criar_visualizar_grupos(request):
 
             liderReq = dados.get("Lider")
 
-            try:
-                if liderReq in integrantes:
-                    lider = get_object_or_404(AlunoProfile, id=liderReq)
-                    grupo.lider=lider
-                    grupo.save()
-                else:
-                    return JsonResponse({"erro":"O lider tem que ser um dos integrantes!"})
-            except Exception as e:
-                return JsonResponse({"erro": str(e)}, status=400)
+            if liderReq:
+                try:
+                    if liderReq in integrantes:
+                        lider = get_object_or_404(AlunoProfile, id=liderReq)
+                        grupo.lider=lider
+                        grupo.save()
+                    else:
+                        return JsonResponse({"erro":"O lider tem que ser um dos integrantes!"})
+                except Exception as e:
+                    return JsonResponse({"erro": str(e)}, status=400)
             
             integrantes_formatacao = [{"id":integ.id, "Nome":integ.user.username}for integ in integrantes_list]
 
-            return JsonResponse({"Grupo_criado":{
+            grupo_response = {
                 "id":grupo.id,
                 "Nome":grupo.nome_grupo,
                 "Lider":{
                     "id": grupo.lider.id,
                     "Nome":grupo.lider.user.username
-                },
+                }if grupo.lider else None,
                 "integrantes":integrantes_formatacao
-            }}, status=200)
+            }
+
+            return JsonResponse(grupo_response, status=200)
         
         except Exception as e:
             return JsonResponse({"erro": str(e)}, status=400)
