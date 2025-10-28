@@ -1,0 +1,10 @@
+.calendar-container{
+    min-width: 500px;
+}
+
+:root {
+  --fc-border-color: gray;
+  --fc-event-bg-color: blue;
+  --fc-event-width: 200px;
+  --fc-daygrid-event-dot-width: 80px;
+}

@@ -1,0 +1,36 @@
+.form-container{
+    background-color: rgba(238, 238, 238);
+    justify-items: center;
+    padding: 66px;
+    border-radius: 0;
+    
+}
+
+.form-box{
+    max-width: 800px;
+    min-width: 200px;
+    padding-bottom: 20px;
+    background-color: white;
+    box-shadow: 0 2px 5px 0 rgba(203, 189, 189, 0.992);
+}
+
+.title-box{
+    height: fit-content;
+    width: auto;
+    padding:5px;
+    background-color: blue;
+    border-radius: 20px 20px 0 0;
+}
+
+.title-box > h1{
+    padding: 6px;
+    font-size: 30px;
+    color: white;
+}
+
+.form-group{
+    max-width: 800px;
+    min-width: 200px;
+    padding: 8px 10px 10px 10px;
+    background-color: white;
+}

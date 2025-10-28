@@ -4,6 +4,10 @@ import { useProjectsById } from '../../Hooks/useProjectById';
 import { useNavigate } from "react-router-dom";
 import './style.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import CreateGroupModal from '../../components/CreateGroupModal';
+import { useState } from "react";
+import Button from "react-bootstrap/Button";
+import CreateEventModal from '../../components/CreateEventModal';
 
 
 function TeacherPage() {
@@ -15,10 +19,31 @@ function TeacherPage() {
     navigate("/CriarGrupo", { state: { projectId: project?.id } });
   };
 
+  const [showGroupModal, setShowGroupModal] = useState(false);
+  const [showEventModal, setShowEventModal] = useState(false);
+
+  const handleOpenGroupModal = () => setShowGroupModal(true);
+  const handleCloseGroupModal = () => setShowGroupModal(false);
+  const handleOpenEventModal = () => setShowEventModal(true);
+  const handleCloseEventModal = () => setShowEventModal(false);
+
   return (
     <>
 
       <div className='Content-container container-md flex-grow-1'>
+
+        <CreateGroupModal
+          show={showGroupModal}
+          handleClose={handleCloseGroupModal}
+          titulo='Criar Grupo'
+          projectId={project?.id} />
+
+        <CreateEventModal
+          show={showEventModal}
+          handleClose={handleCloseEventModal}
+          tituloForm='Criar Evento' />
+
+
 
         {/* HEADER COM INFO DO PROJETO */}
         <div className="header-container container-md">
@@ -26,7 +51,6 @@ function TeacherPage() {
           <h2>{project?.descricao}</h2>
           <h3>{project?.professor.nome}</h3>
           <h4>{project?.turma.nome}</h4>
-          <button className="btn btn-primary">Mais sobre o projeto</button>
         </div>
 
 
@@ -81,9 +105,9 @@ function TeacherPage() {
         <div className="container-md groups-container">
           <h1>Grupos:</h1>
 
-          <button className="btn btn-primary" onClick={handleCreateGroup}>
-            Criar Grupo
-          </button>
+          <Button variant="primary" onClick={handleOpenGroupModal}>
+            Criar grupo
+          </Button>
 
           <div className='cards-container'>
             <ShowGroupsByProject />
@@ -93,7 +117,10 @@ function TeacherPage() {
 
         <div className="events-container container-md">
           <h1>Eventos</h1>
-          <a href="http://localhost:3000/CriarGrupo" className="btn btn-primary">Criar Evento</a>
+          <Button variant="primary" onClick={handleOpenEventModal}>
+            Criar Evento
+          </Button>
+
           <Calendar />
 
         </div>

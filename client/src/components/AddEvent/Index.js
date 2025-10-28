@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"
 
 const AddEvent = () => {
 
@@ -8,67 +7,70 @@ const AddEvent = () => {
     const [descricao, setDescricao] = useState("")
     const [prazo, setPrazo] = useState("")
 
-    const navigate = useNavigate();
 
-    const AddTaskInfo = async () => {
-        let formField = new FormData()
+    const AddEventInfo = async () => {
 
-        formField.append('titulo', titulo)
-        formField.append('descricao', descricao)
-        formField.append('prazo', prazo)
+        const response = await axios.post("http://127.0.0.1:8000/eventos/", {
+            Titulo: titulo,
+            Descricao: descricao,
+            Prazo: prazo
+        });
 
-        await axios.post("http://127.0.0.1:8000/tarefas/", {
-            titulo: titulo,
-            descricao: descricao,
-            prazo: prazo,
-        }).then((response) => {
-            console.log(response.data);
-            navigate('/VerTarefas')
-        })
+        console.log("Resposta completa do backend:", response.data);
 
-    }
+
+        alert("Evento criado com sucesso!");
+
+
+    };
 
     return (
 
-        <div className="container">
+        <div className="form-container">
 
-            <h1>Criar Tarefa</h1>
-
-            <div className="form-group">
+            <div className="form-box">
+                <div className="title-box">
+                    <h1>Criar Evento</h1>
+                </div>
 
                 <div className="form-group">
+                    <label>titulo: </label>
                     <input type="text"
                         className="form-control form-control-lg"
-                        placeholder="Escreva o titulo da tarefa"
-                        name="titulo"
+                        placeholder=""
+                        name="nome"
                         value={titulo}
-                        onChange={(e) => setTtitulo(e.target.value)}
+                        onChange={(e) => {
+                            setTtitulo(e.target.value)
+                        }}
                     />
                 </div>
 
                 <div className="form-group">
-                    <textarea type="text"
+                    <label>prazo: </label>
+                    <input type="date"
                         className="form-control form-control-lg"
-                        placeholder="Escreva a descricao da tarefa"
+                        placeholder="prazo"
+                        name="prazo"
+                        value={prazo}
+                        onChange={(e) => setPrazo(e.target.value)}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>descricao: </label>
+                    <input type="text"
+                        className="form-control form-control-lg"
+                        placeholder="Escreva a descricao do evento"
                         name="descricao"
                         value={descricao}
                         onChange={(e) => setDescricao(e.target.value)}
                     />
                 </div>
 
-                <div className="form-group">
-                    <input type="date"
-                        className="form-control form-control-lg"
-                        placeholder="Escreva o prazo para entrega tarefa"
-                        name="prazo"
-                        value={prazo}
-                        onChange={(e) => setPrazo(e.target.value)}
-                    />
-                </div>
+                <button className="btn btn-success" onClick={AddEventInfo}>Criar Grupo</button>
             </div>
-
-            <button className="btn btn-success" onClick={AddTaskInfo}>Criar Tarefa</button>
-        </div>
+        </div >
 
     );
 };

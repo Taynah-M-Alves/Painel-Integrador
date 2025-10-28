@@ -8,6 +8,7 @@ import AddTask from './components/AddTask/Index';
 import TeacherPage from './Pages/TeacherPage/TeacherPage';
 import GroupPage from './Pages/GroupPage/GroupPage';
 import AddGroup from './components/AddGroup/Index';
+import AddEvent from './components/AddEvent/Index';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route exact path='/CriarTarefa' Component={AddTask} />
           <Route exact path='/VerGrupo/:id' Component={GroupPage} />
           <Route exact path='/CriarGrupo' Component={AddGroup} />
+          <Route exact path='/CriarEvento' Component={AddEvent} />
         </Routes>
       </Router>
     </div>
