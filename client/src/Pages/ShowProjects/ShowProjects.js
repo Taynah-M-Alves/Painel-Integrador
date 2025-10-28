@@ -15,7 +15,6 @@ const ShowProjects = () => {
     return (
         <div>
             <h1>Página de mostrar todos os projetos</h1>
-            <h2>Nessa página você escolhe os projetos que quer ver</h2>
             <div className="Projects-module">
                 {projects?.length > 0 ? (
                     projects.map((project, index) => (

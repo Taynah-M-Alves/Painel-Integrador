@@ -108,8 +108,8 @@ def visualizar_grupo_por_id(request, id):
 
         return JsonResponse({
                     "id": grupo.id, 
-                    "Nome do Grupo": grupo.nome_grupo, 
-                    "Data da Criação":grupo.data_criacao.strftime("%d/%m/%Y, %H:%M:%S"),
+                    "Nome_Grupo": grupo.nome_grupo, 
+                    "Data_Criação":grupo.data_criacao.strftime("%d/%m/%Y, %H:%M:%S"),
                     "Integrantes": integrantes,
                     "Lider": lider,
                 }, status=200)

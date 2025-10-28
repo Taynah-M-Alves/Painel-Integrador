@@ -1,9 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { useLocation } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
-import TextInput from '../TextInput';
-import SelectInput from '../SelectInput';
 import Select from 'react-select';
 import { useStudentsWithoutGroup } from '../../Hooks/useStudentsWithoutGroup';
 
@@ -57,14 +54,6 @@ function CreateGroupModal({ show, handleClose, titulo, projectId }) {
         }
     };
 
-
-
-
-    const handleSelected = (selected) => {
-        setSelectedOption(selected);
-        setIntegrantes(selected ? selected.map(opt => opt.value) : []);
-    }
-
     return (
         <Modal
             show={show}
@@ -115,29 +104,6 @@ function CreateGroupModal({ show, handleClose, titulo, projectId }) {
                         options={selectedOption}
                     />
                 </div>
-
-                {/* <TextInput
-                    label='Escreva o nome do grupo'
-                    placeholder='ex: techLife'
-                />
-
-                <SelectInput
-                    label='Selecione os integrantes do grupo'
-                    options={options}
-                    handleSelected={handleSelected}
-                    selectedOption={selectedOption}
-                    value={selectedOption}
-                    isMulti={true}
-                />
-
-                <SelectInput
-                    label='Selecione os integrantes do grupo'
-                    options={integrantes}
-                    handleSelected={handleSelected}
-                    selectedOption={selectedLider}
-                    value={selectedLider}
-                    isMulti={false}
-                /> */}
 
             </Modal.Body>
             <Modal.Footer>

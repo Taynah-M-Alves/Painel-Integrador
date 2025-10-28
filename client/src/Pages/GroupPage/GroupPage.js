@@ -1,9 +1,17 @@
+import { useGroupsById } from "../../Hooks/useGroupById";
 
 
-const GroupPage = () => {
+function GroupPage() {
+
+    const group = useGroupsById();
+    console.log(group)
 
     return (
-        <h1>PÁGINA DO GRUPO</h1>
+        <div>
+            <h1>{group.groups.Nome_Grupo}</h1>
+            <h2>{group.groups.id}</h2>
+        </div>
+
     );
 };
 

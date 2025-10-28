@@ -8,6 +8,7 @@ const ShowGroupsByProject = () => {
 
     const { groups } = useGroupsByProject();
     console.log("groups", groups)
+    
     return (
         <div className='cards'>
             {groups?.length > 0 ? (
