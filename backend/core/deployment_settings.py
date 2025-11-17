@@ -3,30 +3,36 @@ import dj_database_url
 from .settings import *
 from .settings import BASE_DIR
 
-ALLOWED_HOSTS = [os.environ.get('RENDER_EXTERNAL_HOSTNAME')]
-
-ALLOWED_HOSTS = [
-    os.environ.get('RENDER_EXTERNAL_HOSTNAME'),
-    "localhost",
-    "127.0.0.1",
-    "https://painel-integrador.onrender.com",
-]
-
-
 DEBUG = False
 SECRET_KEY = os.environ.get('SECRET_KEY')
+
+RENDER_HOST = [os.environ.get('RENDER_EXTERNAL_HOSTNAME')]
+
+ALLOWED_HOSTS = [
+    RENDER_HOST,
+    "localhost",
+    "127.0.0.1",
+    "painel-integrador.onrender.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{RENDER_HOST}",
+    "https://painel-integrador.onrender.com"
+    "https://painel-integrador.vercel.app"
+]
+
+CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
     'https://painel-integrador.vercel.app',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = False
-
-
+CORS_ALLOW_HEADERS = ["*"]
+CORS_ALLOW_METHODS = ["*"]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
