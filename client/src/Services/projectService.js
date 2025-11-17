@@ -8,7 +8,7 @@ export const getProjects = async () => {
 
 
 export const getProjectById = async (id) => {
-    const response = await axios.get(`http://127.0.0.1:8000/projetos/${id}/`)
+    const response = await axios.get(`https://painel-integrador.onrender.com/projetos/${id}/`)
     return response.data
 }
 
