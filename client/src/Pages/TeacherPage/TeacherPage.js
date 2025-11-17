@@ -9,13 +9,15 @@ import Button from "react-bootstrap/Button";
 import CreateEventModal from '../../components/CreateEventModal';
 import MetricCard from '../../components/MetricCard';
 import { useGroupsByProject } from '../../Hooks/useGroupsByProject';
-import { ListGroup } from 'react-bootstrap';
 import { useEvents } from '../../Hooks/useEvents';
 
 
 function TeacherPage() {
 
   const { project } = useProjectsById();
+
+  console.log('project', project)
+
   const { events, fetchEvents } = useEvents();
 
   const [showGroupModal, setShowGroupModal] = useState(false);

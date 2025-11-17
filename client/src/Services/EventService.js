@@ -1,6 +1,7 @@
-import axios from "axios"
+
+import api from "../utilis/Api"
 
 export const getEvents = async () => {
-    const response = await axios.get('http://127.0.0.1:8000/eventos/')
+    const response = await api.get('/eventos/')
     return response.data
 }

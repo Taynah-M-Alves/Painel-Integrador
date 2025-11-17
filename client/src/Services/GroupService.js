@@ -1,6 +1,7 @@
-import axios from "axios"
+
+import api from "../utilis/Api"
 
 export const getGroupById = async (id) => {
-    const response = await axios.get(`http://127.0.0.1:8000/grupos/${id}`)
+    const response = await api.get(`/grupos/${id}`)
     return response.data
 }

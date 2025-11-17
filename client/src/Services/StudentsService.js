@@ -1,8 +1,9 @@
-import axios from "axios"
+
+import api from "../utilis/Api"
 
 export const getStudentsWithoutGroupByClass = async (id) => {
     try {
-        const response = await axios.get(`http://127.0.0.1:8000/usuarios/alunos/semgrupo/${id}`)
+        const response = await api.get(`/usuarios/alunos/semgrupo/${id}`)
         return response.data
     } catch (err) {
         console.error(err)

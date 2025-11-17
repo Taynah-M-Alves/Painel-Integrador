@@ -1,6 +1,7 @@
-import axios from "axios"
+
+import api from "../utilis/Api"
 
 export const getHistoryByTask = async (taskId) => {
-    const response = await axios.get(`http://127.0.0.1:8000/historico/${taskId}`)
+    const response = await api.get(`/historico/${taskId}`)
     return response.data
 }
