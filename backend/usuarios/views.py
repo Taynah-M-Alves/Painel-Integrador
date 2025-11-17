@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
-from .models import Turma
+from .models import Turma, User
 from django.http import JsonResponse
 from usuarios.models import AlunoProfile,ProfessorProfile
 from projIntegrador.models import projIntegrador
@@ -34,7 +34,7 @@ def criar_admin(request):
             username=username,
             email=email,
             password=make_password(password),
-            role=User.role.PROF,
+            role=User.Roles.PROFESSOR,
             is_staff=True,
             is_superuser=True,
         )
