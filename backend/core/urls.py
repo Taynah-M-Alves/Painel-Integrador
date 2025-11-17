@@ -19,4 +19,5 @@ urlpatterns = [
     path('projetos/', include("projIntegrador.urls")),
     path('usuarios/', include("usuarios.urls")),
     path('eventos/', include("evento.urls")),
+    path('historico/', include("historico.urls")),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

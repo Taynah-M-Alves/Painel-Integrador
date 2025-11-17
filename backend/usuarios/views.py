@@ -1,7 +1,9 @@
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
 from .models import Turma
 from django.http import JsonResponse
 from usuarios.models import AlunoProfile,ProfessorProfile
+from projIntegrador.models import projIntegrador
 
 @csrf_exempt
 def mostrar_turmas(request):
@@ -39,10 +41,10 @@ def mostrar_alunos(request):
     return JsonResponse({"erro":"Método não permitido. Use GET"}, status=405)
 
 @csrf_exempt
-def mostrar_alunos_sem_grupo(request):
+def mostrar_alunos_sem_grupo_by_turma(request, id):
     if request.method == 'GET':
-
-        alunos = AlunoProfile.objects.filter(grupo__isnull=True)
+        receivedTurma = get_object_or_404(Turma, pk=id)
+        alunos = AlunoProfile.objects.filter(grupo__isnull=True,turma = receivedTurma)
         alunos_list = [
             {
                 "Id_Aluno": ap.id,

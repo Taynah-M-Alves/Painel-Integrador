@@ -6,8 +6,7 @@ import json
 from django.contrib.auth import get_user_model
 from usuarios.models import AlunoProfile
 from projIntegrador.models import projIntegrador
-from .serializers import GrupoSerializer
-from rest_framework import viewsets
+
 
 
 User = get_user_model()
@@ -106,12 +105,23 @@ def visualizar_grupo_por_id(request, id):
                 ]
         lider = {"id":grupo.lider.id, "nome":grupo.lider.user.username} if grupo.lider else None
 
+        turma = None
+        if grupo.projeto_integrador and grupo.projeto_integrador.turma:
+            turma = grupo.projeto_integrador.turma.nome_turma
+
+        turmaId = None
+        if grupo.projeto_integrador and grupo.projeto_integrador.turma:
+            turmaId = grupo.projeto_integrador.turma.id
+
         return JsonResponse({
                     "id": grupo.id, 
+                    "Objetivo": grupo.objetivo_projeto,
                     "Nome_Grupo": grupo.nome_grupo, 
                     "Data_Criação":grupo.data_criacao.strftime("%d/%m/%Y, %H:%M:%S"),
                     "Integrantes": integrantes,
                     "Lider": lider,
+                    "turma":turma,
+                    "turmaID":turmaId,
                 }, status=200)
 
     return JsonResponse({"erro":"Metódo não permitido. Use o metódo GET."}, status=405)
@@ -160,7 +170,7 @@ def adicionar_integrantes(request, id):
             "Nome do Grupo":grupo.nome_grupo,
             "Integrantes Adicionados": list_adicionados,
         }, status=200)
-    return JsonResponse({"erro": "Método não permitido. Use o método PATCH"}, status=405)
+    return JsonResponse({"erro": "Método não permitido. Use o método PATCH"}, status=200)
 
 @csrf_exempt
 def atribuir_lideranca(request,id):
@@ -178,6 +188,7 @@ def atribuir_lideranca(request,id):
 
             return JsonResponse({
                 "id_Grupo":grupo.id,
+                "Objetivo": grupo.objetivo_projeto,
                 "Nome_Grupo":grupo.nome_grupo,
                 "Lider_grupo": {
                     "id":grupo.lider.id,
@@ -189,10 +200,32 @@ def atribuir_lideranca(request,id):
         
     return JsonResponse({"erro": "Metodo não permitido. Use o método PATCH"},status=400)
 
+@csrf_exempt
+def atribuir_objetivo_grupo(request,id):
+    if request.method == "PATCH":
 
+        try:
+            grupo = get_object_or_404(Grupo, pk=id)
+            dado = json.loads(request.body)
+            objetivo = dado.get("Objetivo")
+            
+            grupo.objetivo_projeto = objetivo
+            grupo.save()
 
-# def RemoverIntegrantesGrupo(request, id):
-#     pass
+            return JsonResponse({
+                "id_Grupo":grupo.id,
+                "Objetivo": grupo.objetivo_projeto,
+                "Nome_Grupo":grupo.nome_grupo,
+                "Lider_grupo": {
+                    "id":grupo.lider.id,
+                    "Nome":grupo.lider.user.username,
+                },
+                
+            }, status=200)
+        except Exception as e:
+            return JsonResponse({"erro":str(e)})
+        
+    return JsonResponse({"erro": "Metodo não permitido. Use o método PATCH"},status=400)
 
 
 

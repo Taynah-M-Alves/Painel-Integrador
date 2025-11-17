@@ -10,6 +10,7 @@ class StatusEvento(models.Model):
 class Evento(models.Model):
     titulo = models.CharField(max_length=50)
     descricao = models.TextField()
+    file = models.FileField(upload_to='uploads/images', null=True, blank=True)
     prazo = models.DateField()
     data_criacao = models.DateTimeField(auto_now_add=True)
     status_evento = models.ForeignKey(StatusEvento, on_delete=models.SET_NULL, null=True)

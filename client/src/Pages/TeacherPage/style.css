@@ -96,9 +96,23 @@
   size: 10px;
 }
 
-.title-container{
-  background-color: white;
+.items-container{
+  width: 1200px;
+  gap: 20px;
+  flex-wrap: nowrap;
+  display: flex;
+  align-items: flex-start;
+  align-content: flex-start;
 }
+
+.item-box{
+  border-radius: 6px;
+  height: auto;
+  align-items: flex-start;
+  background-color: aquamarine;
+}
+
+
 
 .container-md{
   display: flex;
@@ -111,11 +125,20 @@
 .groups-container{
   display: flex;
   flex-direction: column;
-  justify-content:center ;
+  /* justify-content:center ; */
   gap: 15px;
   border-radius: 20px;
   border: 2px solid gray;
   height: fit-content;
+}
+
+.group-container-title{
+  display: flex;
+  width: 500px;
+  flex-direction: row;
+  height: 35px;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .cards-container{

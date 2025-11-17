@@ -7,22 +7,17 @@ const ShowGroupsByProject = () => {
     const navigate = useNavigate();
 
     const { groups } = useGroupsByProject();
-    console.log("groups", groups)
-    
+
+
     return (
         <div className='cards'>
             {groups?.length > 0 ? (
                 groups.map((group, index) => (
                     <div key={index}>
-                        <Card style={{ width: '18rem' }} onClick={() => navigate(`/VerGrupo/${group.id}`)}>
+                        <Card className='Card-box' onClick={() => navigate(`/VerGrupo/${group.id}`)}>
                             <Card.Body>
                                 <Card.Title>{group.Nome_Grupo}</Card.Title>
-                                <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                                <Card.Text>
-                                    Default Description
-                                </Card.Text>
-                                <Card.Link href="#">Card Link</Card.Link>
-                                <Card.Link href="#">Another Link</Card.Link>
+
                             </Card.Body>
                         </Card>
                     </div>

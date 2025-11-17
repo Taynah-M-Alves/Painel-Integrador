@@ -7,6 +7,7 @@ User = settings.AUTH_USER_MODEL
 
 class Grupo(models.Model):
     image = models.ImageField(upload_to='uploads/images', null=True, blank=True)
+    objetivo_projeto = models.TextField()
     nome_grupo = models.CharField(max_length=120)
     projeto_integrador = models.ForeignKey("projIntegrador.ProjIntegrador", on_delete=models.SET_NULL, null= True, blank=True, related_name="ProjetoIntegrador")
     data_criacao = models.DateTimeField(auto_now_add=True)

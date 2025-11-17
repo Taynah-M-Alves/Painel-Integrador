@@ -1,7 +1,6 @@
 import Calendar from '../../components/Calendar';
 import ShowGroupsByProject from '../../components/ShowGroupsByProject/Index';
 import { useProjectsById } from '../../Hooks/useProjectById';
-import { useNavigate } from "react-router-dom";
 import './style.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CreateGroupModal from '../../components/CreateGroupModal';
@@ -13,11 +12,6 @@ import CreateEventModal from '../../components/CreateEventModal';
 function TeacherPage() {
 
   const { project } = useProjectsById();
-  const navigate = useNavigate();
-
-  const handleCreateGroup = () => {
-    navigate("/CriarGrupo", { state: { projectId: project?.id } });
-  };
 
   const [showGroupModal, setShowGroupModal] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
@@ -101,30 +95,40 @@ function TeacherPage() {
 
         </div>
 
-        {/* ÁREA DOS GRUPOS */}
-        <div className="container-md groups-container">
-          <h1>Grupos:</h1>
+        <div className="col items-container">
+          <div class="col item-box">
+            {/* ÁREA DOS GRUPOS */}
 
-          <Button variant="primary" onClick={handleOpenGroupModal}>
-            Criar grupo
-          </Button>
+            <div className=" groups-container">
+              <div className='group-container-title'>
+                <h3>Grupos</h3>
 
-          <div className='cards-container'>
-            <ShowGroupsByProject />
+                <Button variant="primary" onClick={handleOpenGroupModal}>
+                  Criar grupo
+                </Button>
+
+              </div>
+
+              <div className='cards-container'>
+                <ShowGroupsByProject />
+              </div>
+            </div>
+
           </div>
         </div>
 
+        <div class="col item-box">
+          <div className="events-container ">
+            <h1>Eventos</h1>
+            <Button variant="primary" onClick={handleOpenEventModal}>
+              Criar Evento
+            </Button>
 
-        <div className="events-container container-md">
-          <h1>Eventos</h1>
-          <Button variant="primary" onClick={handleOpenEventModal}>
-            Criar Evento
-          </Button>
+            <Calendar />
 
-          <Calendar />
+          </div>
 
         </div>
-
       </div>
     </>
   )
