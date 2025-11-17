@@ -3,7 +3,6 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
-import { useEvents } from '../../Hooks/useEvents';
 import allLocales from '@fullcalendar/core/locales-all';
 import EventDetailsModal from '../EventDetailsModal';
 import { useState } from 'react';

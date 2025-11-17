@@ -3,16 +3,18 @@ import { getProjects } from "../Services/projectService";
 
 
 export const useProjects = () => {
-    const [projects, setProjects] = useState([])
+  const [projects, setProjects] = useState([])
 
-    useEffect(() => {
-        const fetchProjects = async () => {
-      const data = await getProjects();
-      setProjects(data);
-    };
 
+  const fetchProjects = async () => {
+    const data = await getProjects();
+    setProjects(data);
+  };
+  useEffect(() => {
     fetchProjects();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
-  return { projects, setProjects };
+  return { projects, fetchProjects };
 };

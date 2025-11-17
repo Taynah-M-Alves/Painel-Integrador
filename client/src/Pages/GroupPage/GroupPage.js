@@ -6,14 +6,13 @@ import "./style.css"
 import Calendar2 from "../../components/Calendar2/Calendar2";
 import { useStudentsAvailable } from "../../Hooks/useStudentsWithoutGroup";
 import AddIntegranteModal from "../../components/AddIntegranteModal"
-import axios from "axios";
+import api from "../../utilis/Api";
 
 
 function GroupPage() {
 
     const { group, fetchGroupsId } = useGroupsById();
     const [selectedOption, setSelectedOption] = useState("tarefas")
-    const [selectedOPT, setSelectedOPT] = useState("null")
 
     const [showAddModal, setShowAddModal] = useState(false);
 
@@ -28,12 +27,11 @@ function GroupPage() {
 
     const SetarObjetivo = async () => {
         try {
-            const response = await axios.patch(`http://127.0.0.1:8000/grupos/${group?.id}/atribuir-objetivo`, {
+            const response = await api.patch(`/grupos/${group?.id}/atribuir-objetivo`, {
                 Objetivo: objetivo,
             });
 
             console.log("Resposta completa do backend:", response.data)
-            fetchGroupsId();
 
             alert("Objetivo alterado com sucesso!");
 
@@ -57,12 +55,12 @@ function GroupPage() {
         <div className="page-container">
             <AddIntegranteModal
                 availableStudants={studentsAvailable}
-                refreshFunction={fetchGroupsId}
-                fetchAvailableStudants={fetchStudantsAvailable}
                 show={showAddModal}
                 handleClose={handleCloseAddModal}
                 integrantes={group.Integrantes}
-                groupID={group.id} />
+                groupID={group.id}
+                refreshFunction={fetchGroupsId}
+                fetchAvailableStudants={fetchStudantsAvailable} />
 
 
             <div className="group-container container p-4 rounded">
@@ -74,7 +72,7 @@ function GroupPage() {
                         <strong>Objetivo do Projeto</strong>
                         <i className="fa-solid fa-pen edit-icon" onClick={handleEditObjective}></i>
                     </div>
-                    {editObjective == false ? (
+                    {editObjective === false ? (
                         <input class="form-control" type="text" placeholder={group?.Objetivo} aria-label="Disabled input example" disabled />
                     ) : (
                         <div className="d-flex gap-2">

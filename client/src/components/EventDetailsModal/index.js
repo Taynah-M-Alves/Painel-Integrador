@@ -1,8 +1,7 @@
-import { useState } from 'react';
+
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Select from 'react-select';
-import axios from 'axios';
+
 
 function EventDetailsModal({ show, handleClose, selectedEventId }) {
 

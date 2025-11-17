@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { getStudentsWithoutGroupByClass } from "../Services/StudentsService";
-import { useParams } from "react-router-dom";
 
 
 export const useStudentsAvailable = (id) => {
@@ -15,6 +14,8 @@ export const useStudentsAvailable = (id) => {
   useEffect(() => {
     if (!id) return;
     fetchStudantsAvailable();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [id]);
 
   return { studentsAvailable, fetchStudantsAvailable };

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { getHistoryByTask } from "../Services/HistoryService";
-import { useParams } from "react-router-dom";
 
 export const useHistoryByTask = (taskId) => {
     const [history, setHistory] = useState(null);
@@ -13,10 +12,11 @@ export const useHistoryByTask = (taskId) => {
 
     useEffect(() => {
         if (!taskId) {
-            setHistory(null); // limpa quando não há tarefa
+            setHistory(null);
             return;
         }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         fetchHistoryByTask();
     }, [taskId])
 

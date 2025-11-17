@@ -14,6 +14,7 @@ export const useGroupsById = () => {
 
     useEffect(() => {
         fetchGroupsId();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
 
     return { group, fetchGroupsId };

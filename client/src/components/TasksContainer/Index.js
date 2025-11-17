@@ -39,13 +39,14 @@ const TasksContainer = ({ groupId, integrantes }) => {
                     show={showCreateTaskModal}
                     groupId={groupId}
                     integrantes={integrantes}
-                    refreshFunction={fetchTasksByGroup} />
+                    refreshFunction={fetchTasksByGroup}
+                />
 
                 <TaskModal
                     show={showTaskModal}
                     handleClose={handleCloseTaskInfosModal}
                     taskSelected={taskSelected}
-                    refreshfunction={fetchTasksByGroup}
+
                 />
 
 

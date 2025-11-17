@@ -6,6 +6,7 @@ export const useGroupsByProject = () => {
     const [groups, setGroups] = useState([""])
     const { id } = useParams();
 
+
     const fetchGroupsByProject = async () => {
         const data = await getGroupsByProject(id);
         setGroups(data)
@@ -13,6 +14,7 @@ export const useGroupsByProject = () => {
 
     useEffect(() => {
         fetchGroupsByProject();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     return { groups, fetchGroupsByProject };

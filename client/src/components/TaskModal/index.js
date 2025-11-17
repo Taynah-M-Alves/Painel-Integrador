@@ -2,26 +2,24 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useHistoryByTask } from '../../Hooks/useHistoryByTask';
-import axios from 'axios';
 import './style.css'
+import api from '../../utilis/Api';
 
-function TaskModal({ show, handleClose, taskSelected, refreshfunction }) {
+function TaskModal({ show, handleClose, taskSelected }) {
 
-    const { history, fetchHistoryByTask } = useHistoryByTask(taskSelected?.id);
+    const { history } = useHistoryByTask(taskSelected?.id);
 
     console.log("historico", history)
     console.log("taskSelected", taskSelected)
 
     const FinishTask = async () => {
 
-        if (taskSelected?.status != 'Finalizado') {
+        if (taskSelected?.status !== 'Finalizado') {
 
-            const response = await axios.patch(`http://127.0.0.1:8000/tarefas/${taskSelected?.id}/status-finalizado`);
+            const response = await api.patch(`/tarefas/${taskSelected?.id}/status-finalizado`);
 
             console.log("Resposta completa do backend:", response.data);
 
-            refreshfunction();
-            fetchHistoryByTask();
             handleClose();
 
 

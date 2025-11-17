@@ -1,10 +1,11 @@
-import axios from 'axios';
+
 import { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import Select from 'react-select';
 import { useStudentsAvailable } from '../../Hooks/useStudentsWithoutGroup';
+import api from '../../utilis/Api';
 
-function CreateGroupModal({ show, handleClose, titulo, projectId, refreshFunction, turmaId }) {
+function CreateGroupModal({ show, handleClose, refreshFunction,titulo, projectId, turmaId }) {
 
     const [nome, setNome] = useState("")
     const [integrantes, setIntegrantes] = useState("")
@@ -30,7 +31,7 @@ function CreateGroupModal({ show, handleClose, titulo, projectId, refreshFunctio
 
         if (integrantesIds.length < 6) {
             try {
-                const response = await axios.post("http://127.0.0.1:8000/grupos/", {
+                const response = await api.post("/grupos/", {
                     Nome_Grupo: nome,
                     Projeto_Integrador: projectId,
                     Integrantes: integrantes,
@@ -41,10 +42,8 @@ function CreateGroupModal({ show, handleClose, titulo, projectId, refreshFunctio
                 handleClose();
                 refreshFunction();
 
-                const groupId = response.data.id;
-
                 alert("Grupo criado com sucesso!");
-                
+
             } catch (error) {
                 console.error("Erro ao criar grupo:", error.response?.data || error);
                 alert("Erro ao criar grupo!");
@@ -60,7 +59,6 @@ function CreateGroupModal({ show, handleClose, titulo, projectId, refreshFunctio
             onHide={handleClose}
             backdrop="static"
             keyboard={false}
-            refreshFunction={refreshFunction}
         >
             <Modal.Header closeButton>
                 <Modal.Title>{titulo}</Modal.Title>

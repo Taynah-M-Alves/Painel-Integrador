@@ -1,5 +1,4 @@
 import Card from 'react-bootstrap/Card';
-import { useGroupsByProject } from "../../Hooks/useGroupsByProject";
 import { useNavigate } from "react-router-dom"
 import './style.css'
 

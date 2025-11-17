@@ -47,14 +47,15 @@ function TeacherPage() {
           handleClose={handleCloseGroupModal}
           titulo='Criar Grupo'
           projectId={project?.id}
-          refreshFunction={fetchGroupsByProject}
-          turmaId={project?.turma.id} />
+          turmaId={project?.turma.id}
+          refreshFunction={fetchGroupsByProject} />
 
         <CreateEventModal
           show={showEventModal}
           handleClose={handleCloseEventModal}
           tituloForm='Criar Evento'
-          refreshFunction={fetchEvents} />
+          refreshFunction={fetchEvents}
+        />
 
 
 
@@ -106,7 +107,7 @@ function TeacherPage() {
           <div className='group-title-button container-md'>
             <h3>Grupos</h3>
             <Button className="groups-button" variant="primary" onClick={handleOpenGroupModal}>
-              <i class="fa-solid fa-plus"></i> Criar grupo
+              <i className="fa-solid fa-plus"></i> Criar grupo
             </Button>
           </div>
 
@@ -118,7 +119,7 @@ function TeacherPage() {
         <div className='group-title-button container-md'>
           <h3>Eventos</h3>
           <Button className="event-button" variant="primary" onClick={handleOpenEventModal}>
-            <i class="fa-solid fa-plus"></i> Criar Evento
+            <i className="fa-solid fa-plus"></i> Criar Evento
           </Button>
         </div>
 

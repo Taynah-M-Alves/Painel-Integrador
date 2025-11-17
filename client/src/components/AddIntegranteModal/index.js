@@ -2,9 +2,9 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Select from 'react-select';
-import axios from 'axios';
+import api from '../../utilis/Api';
 
-function AddIntegranteModal({ show, handleClose, refreshFunction, fetchAvailableStudants, availableStudants, integrantes, groupID }) {
+function AddIntegranteModal({ show, handleClose, availableStudants, fetchAvailableStudants, refreshFunction, integrantes, groupID }) {
 
     const [selectedOption, setSelectedOption] = useState(null);
     const [selectedStudents, setSelectedStudents] = useState(null);
@@ -26,7 +26,7 @@ function AddIntegranteModal({ show, handleClose, refreshFunction, fetchAvailable
 
         if (tamanho <= 5) {
             try {
-                const response = await axios.patch(`http://localhost:8000/grupos/${groupID}/adicionar-integrante`, {
+                const response = await api.patch(`/grupos/${groupID}/adicionar-integrante`, {
                     Integrantes: selectedStudents
                 });
 
@@ -36,9 +36,10 @@ function AddIntegranteModal({ show, handleClose, refreshFunction, fetchAvailable
                     selectLider()
                 }
 
-                handleClose();
-                refreshFunction();
                 fetchAvailableStudants();
+                refreshFunction();
+                handleClose();
+
 
                 setSelectedOption(null);
 
@@ -61,11 +62,13 @@ function AddIntegranteModal({ show, handleClose, refreshFunction, fetchAvailable
 
     const selectLider = async () => {
 
-        const response = await axios.patch(`http://127.0.0.1:8000/grupos/${groupID}/atribuir-lideranca`, {
+        const response = await api.patch(`/grupos/${groupID}/atribuir-lideranca`, {
             Lider: Lider,
         })
 
-        refreshFunction();
+        console.log("Resposta completa do backend:", response.data);
+
+
         handleClose();
 
         alert("Atribuição de liderança feita com sucesso!")
@@ -87,8 +90,7 @@ function AddIntegranteModal({ show, handleClose, refreshFunction, fetchAvailable
                 show={show}
                 onHide={handleClose}
                 backdrop="static"
-                keyboard={false}
-                refreshFunction={refreshFunction}>
+                keyboard={false}>
 
                 <Modal.Header closeButton onClick={handleClose}>
                     <Modal.Title>Adicionar Integrante</Modal.Title>

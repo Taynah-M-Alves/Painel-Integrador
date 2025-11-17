@@ -1,8 +1,9 @@
-import axios from 'axios';
+
 import { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import Select from 'react-select';
 import "./style.css"
+import api from '../../utilis/Api';
 
 function CreateTaskModal({ show, handleClose, groupId, integrantes, refreshFunction }) {
 
@@ -20,7 +21,7 @@ function CreateTaskModal({ show, handleClose, groupId, integrantes, refreshFunct
 
     const AddTaskInfo = async () => {
         try {
-            const response = await axios.post("http://127.0.0.1:8000/tarefas/", {
+            const response = await api.post("/tarefas/", {
                 titulo: titulo,
                 descricao: descricao,
                 prazo: prazo,
@@ -29,7 +30,6 @@ function CreateTaskModal({ show, handleClose, groupId, integrantes, refreshFunct
                 responsavel: responsavel?.value,
             });
             console.log("Resposta completa do backend:", response.data)
-
             refreshFunction();
             handleClose();
 

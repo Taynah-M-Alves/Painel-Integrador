@@ -6,7 +6,6 @@ export const useTasksByGroup = () => {
     const [tasks, setTasks] = useState([""])
     const { id } = useParams();
 
-
     const fetchTasksByGroup = async () => {
         const data = await getTasksByGroup(id);
         setTasks(data)
@@ -14,6 +13,8 @@ export const useTasksByGroup = () => {
 
     useEffect(() => {
         fetchTasksByGroup();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [id]);
 
 

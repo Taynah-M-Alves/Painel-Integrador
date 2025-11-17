@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import axios from 'axios';
+import api from '../../utilis/Api';
 
-function CreateEventModal({ show, handleClose, tituloForm, refreshFunction }) {
+function CreateEventModal({ show, handleClose, tituloForm}) {
 
     const [titulo, setTtitulo] = useState("")
     const [descricao, setDescricao] = useState("")
@@ -12,7 +12,7 @@ function CreateEventModal({ show, handleClose, tituloForm, refreshFunction }) {
 
     const AddEventInfo = async () => {
 
-        const response = await axios.post("http://127.0.0.1:8000/eventos/", {
+        const response = await api.post("/eventos/", {
             Titulo: titulo,
             Descricao: descricao,
             Prazo: prazo
@@ -20,7 +20,6 @@ function CreateEventModal({ show, handleClose, tituloForm, refreshFunction }) {
 
         console.log("Resposta completa do backend:", response.data);
 
-        refreshFunction();
         handleClose();
 
 
