@@ -3,17 +3,18 @@ import { getGroupById } from "../Services/GroupService";
 import { useParams } from "react-router-dom";
 
 export const useGroupsById = () => {
-    const [groups, setGroups] = useState([""])
+    const [group, setGroup] = useState([""])
     const { id } = useParams();
 
-    useEffect(() => {
-        const getGroupsId = async () => {
-            const data = await getGroupById(id);
-            setGroups(data)
-        };
 
-        getGroupsId();
+    const fetchGroupsId = async () => {
+        const data = await getGroupById(id);
+        setGroup(data)
+    };
+
+    useEffect(() => {
+        fetchGroupsId();
     }, [id])
 
-    return { groups };
+    return { group, fetchGroupsId };
 };

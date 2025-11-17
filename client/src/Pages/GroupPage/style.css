@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    font-family: 'Poppins', sans-serif;
+}
+
+.page-container{
+  padding: 16px;
+}
+
+.body-cont{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 0px;
+}
+
+.group-container {
+  background: #fff;
+  border: 1px solid #e7e9ef;
+}
+
+.group-title {
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.objective-box {
+  background: #eef6ff;
+  border: 1px solid #d9e7ff;
+}
+
+.edit-icon {
+  cursor: pointer;
+  color: #5a8dd8;
+}
+
+.integrantes-list .integrante-card {
+  background: #f8f9fc;
+  border: 1px solid #e6e8ef;
+  min-width: 230px;
+}
+
+.avatar {
+  background: #dce7ff;
+  color: #1a3a73;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+}
+
+.leader-badge {
+  font-size: 13px;
+  color: #b8860b;
+  font-weight: 600;
+}
+
+.remove-icon {
+  cursor: pointer;
+  color: #888;
+}
+
+.remove-icon:hover {
+  color: #444;
+}
+
+.add-member-btn {
+  font-weight: 500;
+  color: #1d4ed8;
+  text-decoration: none;
+}
+
+.add-member-btn:hover {
+  text-decoration: underline;
+}
+
+
+.aplication-container{
+    margin-top: 20px;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+.wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.wrapper .option{
+    cursor: pointer;
+    position: relative;
+    padding-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+/* Esconde o input corretamente */
+.wrapper .option input{
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Estilo do texto */
+.wrapper .option span{
+    color: #808080;
+    font-size: 20px;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+/* Linha antes de selecionar */
+.wrapper .option span::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #3d7bd7;
+    transition: width 0.3s ease;
+}
+
+/* Linha aparece quando o input está marcado */
+.wrapper .option input:checked + span::before {
+    width: 100%;
+}
+
+/* Texto fica colorido ao selecionar */
+.wrapper .option input:checked + span {
+    color: #3d7bd7;
+    font-weight: 600;
+}

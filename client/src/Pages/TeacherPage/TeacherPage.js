@@ -7,128 +7,125 @@ import CreateGroupModal from '../../components/CreateGroupModal';
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import CreateEventModal from '../../components/CreateEventModal';
+import MetricCard from '../../components/MetricCard';
+import { useGroupsByProject } from '../../Hooks/useGroupsByProject';
+import { ListGroup } from 'react-bootstrap';
+import { useEvents } from '../../Hooks/useEvents';
 
 
 function TeacherPage() {
 
   const { project } = useProjectsById();
+  const { events, fetchEvents } = useEvents();
 
   const [showGroupModal, setShowGroupModal] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
+  const { groups, fetchGroupsByProject } = useGroupsByProject();
 
   const handleOpenGroupModal = () => setShowGroupModal(true);
   const handleCloseGroupModal = () => setShowGroupModal(false);
   const handleOpenEventModal = () => setShowEventModal(true);
   const handleCloseEventModal = () => setShowEventModal(false);
 
+  const UserIcon = () => <i className="fa-solid fa-user"></i>;
+
+  const ListIcon = () => <i className="fa-solid fa-list"></i>
+
+  const squareArrowIcon = () => <i className="fa-solid fa-square-arrow-up-right"></i>
+
+  const checkIcon = () => <i className="fa-solid fa-clipboard-check"></i>
+
+
   return (
     <>
-
-      <div className='Content-container container-md flex-grow-1'>
+      <div className='Content-container container-md flex-grow-1 bg-gray-50'>
 
         <CreateGroupModal
           show={showGroupModal}
           handleClose={handleCloseGroupModal}
           titulo='Criar Grupo'
-          projectId={project?.id} />
+          projectId={project?.id}
+          refreshFunction={fetchGroupsByProject}
+          turmaId={project?.turma.id} />
 
         <CreateEventModal
           show={showEventModal}
           handleClose={handleCloseEventModal}
-          tituloForm='Criar Evento' />
+          tituloForm='Criar Evento'
+          refreshFunction={fetchEvents} />
 
 
 
         {/* HEADER COM INFO DO PROJETO */}
         <div className="header-container container-md">
           <h1>{project?.tema || "Carregando..."}</h1>
-          <h2>{project?.descricao}</h2>
-          <h3>{project?.professor.nome}</h3>
-          <h4>{project?.turma.nome}</h4>
+          <h3>{project?.professor.nome} - {project?.turma.nome}</h3>
         </div>
-
 
         {/* CONTAINER DOS PARAMETROS */}
         <div className="parameters-container container-md ">
 
-          <div className='parameter-box'>
-            <div className='parameter-data'>
-              <h4>Total de Alunos</h4>
-              <h5>24</h5>
-              <h6>2 turmas ativas</h6>
-            </div>
-            <div className='parameter-icon'>
-              <i className="fa-solid fa-list"></i>
-            </div>
+          <MetricCard
+            title="Total de Alunos"
+            value={24}
+            icon={UserIcon}
+            iconColor="text-blue-600"
+            iconBgColor="bg-blue-50"
+          />
 
-          </div>
-          <div className='parameter-box'>
-            <div className='parameter-data'>
-              <h4>Grupos Formados</h4>
-              <h5>2</h5>
-              <h6>5 alunos/grupo</h6>
-            </div>
-            <div className='parameter-icon'>
-              <i className="fa-solid fa-square-arrow-up-right"></i>
-            </div>
-          </div>
-          <div className='parameter-box'>
-            <div className='parameter-data'>
-              <h4>Entregas Pendentes</h4>
-              <h5>3</h5>
-              <h6>Vencendo esta semana</h6>
-            </div>
-            <div className='parameter-icon'>
-              <i className="fa-solid fa-clipboard-check"></i>
-            </div>
-          </div>
-          <div className='parameter-box'>
-            <div className='parameter-data'>
-              <h4>Taxa de Entrega</h4>
-              <h5>3</h5>
-              <h6>No prazo</h6>
-            </div>
-            <div className='parameter-icon'>
-              <i className="fa-solid fa-clipboard-check"></i>
-            </div>
-          </div>
+          <MetricCard
+            title="Grupos Formados"
+            value={groups?.length ?? 0}
+            icon={ListIcon}
+            iconColor="text-blue-600"
+            iconBgColor="bg-blue-50"
+          />
+
+          <MetricCard
+            title="Entregas Pendentes"
+            value={20}
+            icon={squareArrowIcon}
+            iconColor="text-blue-600"
+            iconBgColor="bg-blue-50"
+          />
+
+          <MetricCard
+            title="Entregas realizadas"
+            value={11}
+            icon={checkIcon}
+            iconColor="text-blue-600"
+            iconBgColor="bg-blue-50"
+          />
 
         </div>
 
-        <div className="col items-container">
-          <div class="col item-box">
-            {/* ÁREA DOS GRUPOS */}
-
-            <div className=" groups-container">
-              <div className='group-container-title'>
-                <h3>Grupos</h3>
-
-                <Button variant="primary" onClick={handleOpenGroupModal}>
-                  Criar grupo
-                </Button>
-
-              </div>
-
-              <div className='cards-container'>
-                <ShowGroupsByProject />
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="col item-box">
-          <div className="events-container ">
-            <h1>Eventos</h1>
-            <Button variant="primary" onClick={handleOpenEventModal}>
-              Criar Evento
+        {/* ÁREA DOS GRUPOS */}
+        <div className="container-md groups-container">
+          <div className='group-title-button container-md'>
+            <h3>Grupos</h3>
+            <Button className="groups-button" variant="primary" onClick={handleOpenGroupModal}>
+              <i class="fa-solid fa-plus"></i> Criar grupo
             </Button>
-
-            <Calendar />
-
           </div>
 
+          <div className='cards-container container-md'>
+            <ShowGroupsByProject groups={groups} />
+          </div>
         </div>
+
+        <div className='group-title-button container-md'>
+          <h3>Eventos</h3>
+          <Button className="event-button" variant="primary" onClick={handleOpenEventModal}>
+            <i class="fa-solid fa-plus"></i> Criar Evento
+          </Button>
+        </div>
+
+        <div className="events-container container-md">
+          <Calendar
+            events={events} />
+
+        </div>
+
       </div>
     </>
   )

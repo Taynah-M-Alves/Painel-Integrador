@@ -1,0 +1,13 @@
+.cards-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.status-name{
+    height: fit-content;
+    width: fit-content;
+    background-color: antiquewhite;
+    padding:3px 8px;
+}

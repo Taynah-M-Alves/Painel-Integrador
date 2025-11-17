@@ -2,9 +2,9 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import Select from 'react-select';
-import { useStudentsWithoutGroup } from '../../Hooks/useStudentsWithoutGroup';
+import { useStudentsAvailable } from '../../Hooks/useStudentsWithoutGroup';
 
-function CreateGroupModal({ show, handleClose, titulo, projectId }) {
+function CreateGroupModal({ show, handleClose, titulo, projectId, refreshFunction, turmaId }) {
 
     const [nome, setNome] = useState("")
     const [integrantes, setIntegrantes] = useState("")
@@ -12,9 +12,8 @@ function CreateGroupModal({ show, handleClose, titulo, projectId }) {
     const [selectedOption, setSelectedOption] = useState(null);
     const [selectedLider, setSelectedLider] = useState(null);
 
-    const students = useStudentsWithoutGroup();
-    const optionsArray = students.students;
-
+    const students = useStudentsAvailable(turmaId);
+    const optionsArray = students?.studentsAvailable ?? [];
     const options = optionsArray.map(student => ({
         value: student.Id_Aluno,   // o valor que você quer enviar
         label: student.Nome_Aluno  // o texto que aparece no Select
@@ -38,13 +37,14 @@ function CreateGroupModal({ show, handleClose, titulo, projectId }) {
                     Lider: lider,
                 });
 
-                console.log("Resposta completa do backend:", response.data);
+                console.log("Resposta completa do backend:", response.data)
+                handleClose();
+                refreshFunction();
 
                 const groupId = response.data.id;
-                console.log("groupId extraído:", groupId);
-
 
                 alert("Grupo criado com sucesso!");
+                
             } catch (error) {
                 console.error("Erro ao criar grupo:", error.response?.data || error);
                 alert("Erro ao criar grupo!");
@@ -60,6 +60,7 @@ function CreateGroupModal({ show, handleClose, titulo, projectId }) {
             onHide={handleClose}
             backdrop="static"
             keyboard={false}
+            refreshFunction={refreshFunction}
         >
             <Modal.Header closeButton>
                 <Modal.Title>{titulo}</Modal.Title>
@@ -107,9 +108,6 @@ function CreateGroupModal({ show, handleClose, titulo, projectId }) {
 
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Fechar
-                </Button>
                 <Button variant="primary" onClick={AddGroupInfo}>
                     Criar
                 </Button>

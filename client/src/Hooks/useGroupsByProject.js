@@ -6,14 +6,14 @@ export const useGroupsByProject = () => {
     const [groups, setGroups] = useState([""])
     const { id } = useParams();
 
+    const fetchGroupsByProject = async () => {
+        const data = await getGroupsByProject(id);
+        setGroups(data)
+    };
+
     useEffect(() => {
-        const getGroupsProject = async () => {
-            const data = await getGroupsByProject(id);
-            setGroups(data)
-        };
+        fetchGroupsByProject();
+    }, [id]);
 
-        getGroupsProject();
-    }, [id])
-
-    return { groups };
+    return { groups, fetchGroupsByProject };
 };

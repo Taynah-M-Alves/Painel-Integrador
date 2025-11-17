@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
-import { getStudentsWithoutGroup } from "../Services/StudentsService";
+import { getStudentsWithoutGroupByClass } from "../Services/StudentsService";
+import { useParams } from "react-router-dom";
 
 
-export const useStudentsWithoutGroup = () => {
+export const useStudentsAvailable = (id) => {
 
-  const [students, setStudent] = useState([])
+  const [studentsAvailable, setStudentAvailable] = useState([])
 
+
+  const fetchStudantsAvailable = async () => {
+    const data = await getStudentsWithoutGroupByClass(id);
+    setStudentAvailable(data);
+  };
   useEffect(() => {
-    const fetchProjects = async () => {
-      const data = await getStudentsWithoutGroup();
-      setStudent(data);
-    };
+    if (!id) return;
+    fetchStudantsAvailable();
+  }, [id]);
 
-    fetchProjects();
-  }, []);
-
-  return { students, setStudent };
+  return { studentsAvailable, fetchStudantsAvailable };
 };

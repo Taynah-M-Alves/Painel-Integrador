@@ -1,46 +1,61 @@
 import './style.css'
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useEvents } from '../../Hooks/useEvents';
+import allLocales from '@fullcalendar/core/locales-all';
+import EventDetailsModal from '../EventDetailsModal';
+import { useState } from 'react';
 
-const Calendar = () => {
+const Calendar = ({ events }) => {
 
-    const { events } = useEvents();
+    const [showEventModal, setShowEventModal] = useState(false);
 
-    console.log("events", events)
+    const [selectedEventId, setSelectedEventId] = useState(null);
 
+    const handleOpenEventModal = () => setShowEventModal(true);
+    const handleCloseEventModal = () => setShowEventModal(false);
+
+    const openEvent = (selected) => {
+        setSelectedEventId(selected.event.id);
+        handleOpenEventModal();
+    }
 
     const formattedEvents = events?.map(ev => ({
+        id: ev.id,
         title: ev.Titulo,
-        date: ev.Prazo, // precisa estar em formato ISO se quiser mostrar corretamente
+        date: ev.Prazo,
     })) || [];
 
-    console.log("formatado", formattedEvents)
 
 
     return (
 
         <div className="calendar-container" style={{ margin: '20px' }}>
-            {/* {events?.map((event, index) => (
-                <div key={index}>
-                    <h1>{event.Titulo}</h1>
-                </div>
 
-            ))} */}
+            <EventDetailsModal
+                handleClose={handleCloseEventModal}
+                show={showEventModal}
+                selectedEventId={selectedEventId}
+            />
+
 
             <FullCalendar
-                plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
+                plugins={[dayGridPlugin, listPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
-                listDaySideFormat
+                locales={allLocales}
+                locale="pt-br"
+                listDaySideFormat={false}
+                eventDisplay={"list-item"}
+
                 headerToolbar={{
-                    left: 'dayGridMonth,listWeek',
+                    left: 'dayGridMonth,listMonth',
                     center: 'title',
                     right: 'prev,next',
                 }}
                 events={formattedEvents}
+                eventClick={openEvent}
             />
         </div>
     );

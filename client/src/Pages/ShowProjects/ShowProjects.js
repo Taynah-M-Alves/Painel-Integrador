@@ -14,7 +14,7 @@ const ShowProjects = () => {
 
     return (
         <div>
-            <h1>Página de mostrar todos os projetos</h1>
+            <h1>Projetos:</h1>
             <div className="Projects-module">
                 {projects?.length > 0 ? (
                     projects.map((project, index) => (
@@ -24,9 +24,7 @@ const ShowProjects = () => {
                                 <Card.Header>Projeto {index + 1}</Card.Header>
                                 <Card.Body>
                                     <Card.Title>{project.tema}</Card.Title>
-                                    <Card.Text>
-                                        {project.descricao}
-                                    </Card.Text>
+                            
                                     <Button variant="primary" onClick={() => navigate(`/${project.id}`)}>Ver mais</Button>
                                 </Card.Body>
                             </Card>
