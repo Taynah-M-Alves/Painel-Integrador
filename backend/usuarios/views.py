@@ -34,7 +34,7 @@ def criar_admin(request):
             username=username,
             email=email,
             password=make_password(password),
-            role='PROFESSOR',
+            role=User.role.PROF,
             is_staff=True,
             is_superuser=True,
         )
