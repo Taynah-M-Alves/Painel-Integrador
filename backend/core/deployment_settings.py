@@ -6,7 +6,8 @@ from .settings import BASE_DIR
 DEBUG = False
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-RENDER_HOST = [os.environ.get('RENDER_EXTERNAL_HOSTNAME')]
+# Corrige: RENDER_HOST deve ser string, não lista
+RENDER_HOST = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 
 ALLOWED_HOSTS = [
     RENDER_HOST,
@@ -17,22 +18,22 @@ ALLOWED_HOSTS = [
 
 CSRF_TRUSTED_ORIGINS = [
     f"https://{RENDER_HOST}",
-    "https://painel-integrador.onrender.com"
-    "https://painel-integrador.vercel.app"
+    "https://painel-integrador.onrender.com",
+    "https://painel-integrador.vercel.app",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
-    'https://painel-integrador.vercel.app',
+    "https://painel-integrador.vercel.app",
 ]
 
 CORS_ALLOW_HEADERS = ["*"]
 CORS_ALLOW_METHODS = ["*"]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',   # CORS SEMPRE NO TOPO
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -42,13 +43,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 STORAGES = {
-    "default":{
-        "BACKEND":"django.core.files.storage.FileSystemStorage",
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
-    "staticfiles":{
-        "BACKEND":"whitenoise.storage.CompressedStaticFilesStorage",  
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
@@ -58,5 +58,3 @@ DATABASES = {
         conn_max_age=600
     )
 }
-
-#teste
