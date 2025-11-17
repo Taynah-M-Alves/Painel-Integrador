@@ -9,6 +9,11 @@ CSRF_TRUSTED_ORIGINS = ['https://'+os.environ.get('RENDER_EXTERNAL_HOSTNAME')]
 DEBUG = False
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
+CORS_ALLOWED_ORIGINS = [
+    "https://painel-integrador-7hpgn5n9z-taynah-m-alves-projects.vercel.app",
+]
+
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
