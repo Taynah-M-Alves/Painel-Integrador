@@ -4,6 +4,44 @@ from .models import Turma
 from django.http import JsonResponse
 from usuarios.models import AlunoProfile,ProfessorProfile
 from projIntegrador.models import projIntegrador
+from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+
+User = get_user_model()
+
+@csrf_exempt
+def criar_admin(request):
+    """
+    Cria um superusuário para acessar o Django admin via POST.
+    POST esperado: {"username": "admin", "email": "admin@example.com", "password": "senha123"}
+    """
+    if request.method != "POST":
+        return JsonResponse({"error": "Use POST"}, status=405)
+
+    try:
+        data = json.loads(request.body)
+        username = data["username"]
+        email = data["email"]
+        password = data["password"]
+
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({"error": "Usuário já existe"}, status=400)
+
+        user = User.objects.create(
+            username=username,
+            email=email,
+            password=make_password(password),
+            is_staff=True,
+            is_superuser=True,
+        )
+        return JsonResponse({"success": f"Superusuário {username} criado"})
+    except KeyError:
+        return JsonResponse({"error": "Campos obrigatórios: username, email, password"}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 @csrf_exempt
 def mostrar_turmas(request):
