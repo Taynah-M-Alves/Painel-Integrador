@@ -5,7 +5,7 @@ import Select from 'react-select';
 import { useStudentsAvailable } from '../../Hooks/useStudentsWithoutGroup';
 import api from '../../utilis/Api';
 
-function CreateGroupModal({ show, handleClose, refreshFunction,titulo, projectId, turmaId }) {
+function CreateGroupModal({ show, handleClose, refreshFunction, titulo, projectId, turmaId }) {
 
     const [nome, setNome] = useState("")
     const [integrantes, setIntegrantes] = useState("")
@@ -31,7 +31,7 @@ function CreateGroupModal({ show, handleClose, refreshFunction,titulo, projectId
 
         if (integrantesIds.length < 6) {
             try {
-                const response = await api.post("/grupos/", {
+                const response = await api.post("/grupos", {
                     Nome_Grupo: nome,
                     Projeto_Integrador: projectId,
                     Integrantes: integrantes,

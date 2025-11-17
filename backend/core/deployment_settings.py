@@ -4,14 +4,24 @@ from .settings import *
 from .settings import BASE_DIR
 
 ALLOWED_HOSTS = [os.environ.get('RENDER_EXTERNAL_HOSTNAME')]
-CSRF_TRUSTED_ORIGINS = ['https://'+os.environ.get('RENDER_EXTERNAL_HOSTNAME')]
+
+ALLOWED_HOSTS = [
+    os.environ.get('RENDER_EXTERNAL_HOSTNAME'),
+    "localhost",
+    "127.0.0.1",
+    "https://painel-integrador.onrender.com",
+]
+
 
 DEBUG = False
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 CORS_ALLOWED_ORIGINS = [
-    "https://painel-integrador-7hpgn5n9z-taynah-m-alves-projects.vercel.app",
+    'https://painel-integrador.vercel.app',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = False
+
 
 
 MIDDLEWARE = [
@@ -26,9 +36,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# CORS_ALLOWED_ORIGINS = [
-#     ''
-# ]
 
 STORAGES = {
     "default":{
