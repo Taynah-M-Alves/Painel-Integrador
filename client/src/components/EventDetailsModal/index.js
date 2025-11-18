@@ -37,7 +37,7 @@ function EventDetailsModal({ show, handleClose, selectedEventId }) {
                     <div className="row-container ">
                         <div>
                             <h6 className="info-label font-semibold text-gray-900 mb-2">Prazo</h6>
-                            <p className="text-gray-600">{new Date(events?.criado).toLocaleDateString('pt-BR')}</p>
+                            <p className="text-gray-600">{new Date(events?.prazo + "T12:00").toLocaleDateString('pt-BR')}</p>
                         </div>
                     </div>
 

@@ -7,6 +7,11 @@ export const getEvents = async () => {
 }
 
 export const getEventsById = async (id) => {
-    const response = await api.get(`/eventos/${id}`)
-    return response.data
+    try {
+        const response = await api.get(`/eventos/${id}`)
+        return response.data
+    } catch (err) {
+        console.error(err)
+    }
+
 }

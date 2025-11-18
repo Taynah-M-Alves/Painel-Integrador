@@ -1,4 +1,4 @@
-import Calendar from '../../components/Calendar';
+
 import ShowGroupsByProject from '../../components/ShowGroupsByProject/Index';
 import { useProjectsById } from '../../Hooks/useProjectById';
 import './style.css'
@@ -10,13 +10,12 @@ import CreateEventModal from '../../components/CreateEventModal';
 // import MetricCard from '../../components/MetricCard';
 import { useGroupsByProject } from '../../Hooks/useGroupsByProject';
 import { useEvents } from '../../Hooks/useEvents';
+import Calendar2 from '../../components/Calendar2/Calendar2';
 
 
 function TeacherPage() {
 
   const { project } = useProjectsById();
-
-  console.log('project', project)
 
   const { events, fetchEvents } = useEvents();
 
@@ -28,14 +27,6 @@ function TeacherPage() {
   const handleCloseGroupModal = () => setShowGroupModal(false);
   const handleOpenEventModal = () => setShowEventModal(true);
   const handleCloseEventModal = () => setShowEventModal(false);
-
-  const UserIcon = () => <i className="fa-solid fa-user"></i>;
-
-  const ListIcon = () => <i className="fa-solid fa-list"></i>
-
-  const squareArrowIcon = () => <i className="fa-solid fa-square-arrow-up-right"></i>
-
-  const checkIcon = () => <i className="fa-solid fa-clipboard-check"></i>
 
 
   return (
@@ -66,41 +57,6 @@ function TeacherPage() {
         </div>
 
         {/* CONTAINER DOS PARAMETROS
-        <div className="parameters-container container-md ">
-
-          <MetricCard
-            title="Total de Alunos"
-            value={24}
-            icon={UserIcon}
-            iconColor="text-blue-600"
-            iconBgColor="bg-blue-50"
-          />
-
-          <MetricCard
-            title="Grupos Formados"
-            value={groups?.length ?? 0}
-            icon={ListIcon}
-            iconColor="text-blue-600"
-            iconBgColor="bg-blue-50"
-          />
-
-          <MetricCard
-            title="Entregas Pendentes"
-            value={20}
-            icon={squareArrowIcon}
-            iconColor="text-blue-600"
-            iconBgColor="bg-blue-50"
-          />
-
-          <MetricCard
-            title="Entregas realizadas"
-            value={11}
-            icon={checkIcon}
-            iconColor="text-blue-600"
-            iconBgColor="bg-blue-50"
-          />
-
-        </div> */}
 
         {/* ÁREA DOS GRUPOS */}
         <div className="container-md groups-container">
@@ -124,8 +80,7 @@ function TeacherPage() {
         </div>
 
         <div className="events-container container-md">
-          <Calendar
-            events={events} />
+          <Calendar2 events={events} />
 
         </div>
 

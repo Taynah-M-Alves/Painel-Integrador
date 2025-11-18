@@ -1,16 +1,25 @@
-
 import { useState } from 'react';
 import "./style.css";
+import EventDetailsModal from '../EventDetailsModal';
 
 function Calendar2({ events = [], onEventClick }) {
+
+    const [showEventModal, setShowEventModal] = useState(false);
+
+    const [selectedEventId, setSelectedEventId] = useState(null);
+
+    const handleOpenEventModal = () => setShowEventModal(true);
+    const handleCloseEventModal = () => setShowEventModal(false);
+
     const [currentDate, setCurrentDate] = useState(new Date());
 
     const daysOfWeek = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
-    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    const startingDayOfWeek = firstDayOfMonth.getDay();
-    const daysInMonth = lastDayOfMonth.getDate();
+    const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+    const startingDayOfWeek = firstDay.getDay();
+    const daysInMonth = lastDay.getDate();
 
     const previousMonth = () => {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
@@ -21,8 +30,15 @@ function Calendar2({ events = [], onEventClick }) {
     };
 
     const getEventsForDay = (day) => {
-        return events.filter(event => {
-            const eventDate = new Date(event.date);
+        return events?.filter(event => {
+            const [year, month, dayStr] = event.Prazo.split('-');
+
+            const eventDate = new Date(
+                Number(year),
+                Number(month) - 1,  // meses começam em 0
+                Number(dayStr)
+            );
+
             return (
                 eventDate.getDate() === day &&
                 eventDate.getMonth() === currentDate.getMonth() &&
@@ -31,6 +47,7 @@ function Calendar2({ events = [], onEventClick }) {
         });
     };
 
+
     const monthYear = currentDate.toLocaleDateString('pt-BR', {
         month: 'long',
         year: 'numeric',
@@ -38,50 +55,58 @@ function Calendar2({ events = [], onEventClick }) {
 
     const days = [];
 
+    // empty cells from previous month
     for (let i = 0; i < startingDayOfWeek; i++) {
-        days.push(<div key={`empty-${i}`} className="calendar-empty-cell" />);
+        days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
     }
 
+    // actual days
     for (let day = 1; day <= daysInMonth; day++) {
         const dayEvents = getEventsForDay(day);
-        days.push(
-            <div key={day} className="calendar-day">
-                <div className="calendar-day-number">{day}</div>
 
-                <div className="calendar-events-list">
+        days.push(
+            <div key={day} className="calendar-day filled">
+                <div className="day-number">{day}</div>
+
+                <div className="events-container">
                     {dayEvents.map(event => (
-                        <button
+                        <div
                             key={event.id}
-                            onClick={() => onEventClick && onEventClick(event)}
-                            className="calendar-event-btn"
+                            className="event-pill"
+                            onClick={() => {
+                                setSelectedEventId(event.id);
+                                handleOpenEventModal();
+                            }}
                         >
-                            {event.title}
-                        </button>
+                            {event.Titulo}
+                        </div>
                     ))}
+
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="calendar-container">
+        <div className="calendar-wrapper">
+
+            <EventDetailsModal
+                handleClose={handleCloseEventModal}
+                show={showEventModal}
+                selectedEventId={selectedEventId}
+            />
+
             <div className="calendar-header">
+                <button onClick={previousMonth} className="nav-btn">◀</button>
+
                 <h3 className="calendar-title">{monthYear}</h3>
 
-                <div className="calendar-header-btns">
-                    <button onClick={previousMonth} className="calendar-nav-btn">
-                        <div className="w-5 h-5 text-gray-600">..</div>
-                    </button>
-
-                    <button onClick={nextMonth} className="calendar-nav-btn">
-                        <div className="w-5 h-5 text-gray-600">..</div>
-                    </button>
-                </div>
+                <button onClick={nextMonth} className="nav-btn">▶</button>
             </div>
 
             <div className="calendar-grid">
                 {daysOfWeek.map(day => (
-                    <div key={day} className="calendar-weekday">
+                    <div key={day} className="weekday">
                         {day}
                     </div>
                 ))}

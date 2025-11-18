@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import api from '../../utilis/Api';
 
-function CreateEventModal({ show, handleClose, tituloForm}) {
+function CreateEventModal({ show, handleClose, tituloForm, refreshFunction }) {
 
     const [titulo, setTtitulo] = useState("")
     const [descricao, setDescricao] = useState("")
@@ -20,6 +20,7 @@ function CreateEventModal({ show, handleClose, tituloForm}) {
 
         console.log("Resposta completa do backend:", response.data);
 
+        refreshFunction();
         handleClose();
 
 

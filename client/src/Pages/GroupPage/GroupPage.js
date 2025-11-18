@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useEvents } from "../../Hooks/useEvents";
 import { useGroupsById } from "../../Hooks/useGroupById";
 import TasksContainer from '../../components/TasksContainer/Index';
 import "./style.css"
@@ -10,6 +11,9 @@ import api from "../../utilis/Api";
 
 
 function GroupPage() {
+    const { events, fetchEvents } = useEvents();
+
+    console.log(events)
 
     const { group, fetchGroupsId } = useGroupsById();
     const [selectedOption, setSelectedOption] = useState("tarefas")
@@ -166,7 +170,10 @@ function GroupPage() {
                     )}
 
                     {selectedOption === "eventos" && (
-                        <Calendar2 />
+                        <Calendar2
+                            events={events}
+                            onEventClick={(event) => console.log("Evento clicado:", event)}
+                        />
                     )}
 
                     {selectedOption === "entregas" && (
