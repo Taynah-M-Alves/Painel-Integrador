@@ -12,7 +12,7 @@ function App() {
     <div className="App">
 
       <Router>
-        <NavBarMenu />
+        {/* <NavBarMenu /> */}
         <Routes>
           <Route exact path='/:id/' Component={TeacherPage} />
           <Route exact path='/VerTarefas' Component={TasksContainer} />
