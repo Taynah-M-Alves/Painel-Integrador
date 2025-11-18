@@ -52,45 +52,68 @@ def criar_alunos(request):
     try:
         data = json.loads(request.body)
 
-        # Se for só um objeto, transforma em lista
+        # Garantir que sempre seja uma lista
         if isinstance(data, dict):
             data = [data]
+
+        if not isinstance(data, list):
+            return JsonResponse({"error": "O corpo da requisição deve ser um objeto ou lista de objetos"}, status=400)
 
         resultados = []
 
         for aluno in data:
-            username = aluno.get("username")
-            password = aluno.get("password")
-            turmaId = aluno.get("turma")
+            try:
+                username = aluno.get("username")
+                password = aluno.get("password")
+                turmaId = aluno.get("turma")
 
-            if not username or not password or not turmaId:
-                resultados.append({"error": "Campos faltando", "aluno": aluno})
-                continue
+                # validar campos obrigatórios
+                if not username or not password or not turmaId:
+                    resultados.append({
+                        "aluno": aluno,
+                        "error": "Campos obrigatórios faltando (username, password, turma)"
+                    })
+                    continue
 
-            # verificar turma
-            turma = get_object_or_404(Turma, pk=turmaId)
+                # verificar se a turma existe
+                turma = Turma.objects.filter(pk=turmaId).first()
+                if turma is None:
+                    resultados.append({
+                        "aluno": aluno,
+                        "error": f"Turma {turmaId} não encontrada"
+                    })
+                    continue
 
-            # verificar duplicado
-            if User.objects.filter(username=username).exists():
-                resultados.append({"error": f"Usuário '{username}' já existe"})
-                continue
+                # verificar duplicado
+                if User.objects.filter(username=username).exists():
+                    resultados.append({
+                        "aluno": aluno,
+                        "error": f"Usuário '{username}' já existe"
+                    })
+                    continue
 
-            # criar usuário
-            User.objects.create(
-                username=username,
-                password=make_password(password),
-                role=User.Roles.ALUNO,
-                turma=turma,
-                is_staff=False,
-                is_superuser=False
-            )
+                # criar usuário
+                User.objects.create(
+                    username=username,
+                    password=make_password(password),
+                    role=User.Roles.ALUNO,
+                    turma=turma,
+                    is_staff=False,
+                    is_superuser=False,
+                )
 
-            resultados.append({"success": f"Aluno '{username}' criado"})
+                resultados.append({"success": f"Aluno '{username}' criado"})
 
-        return JsonResponse({"resultados": resultados})
+            except Exception as err:
+                resultados.append({
+                    "aluno": aluno,
+                    "error": f"Erro ao criar aluno: {str(err)}"
+                })
+
+        return JsonResponse({"resultados": resultados}, status=207)
 
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        return JsonResponse({"error": f"Erro ao processar JSON: {str(e)}"}, status=400)
 
 
 @csrf_exempt
