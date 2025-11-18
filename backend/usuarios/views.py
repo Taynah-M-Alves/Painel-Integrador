@@ -43,6 +43,55 @@ def criar_admin(request):
         return JsonResponse({"error": "Campos obrigatórios: username, email, password"}, status=400)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+    
+@csrf_exempt
+def criar_alunos(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Use POST"}, status=405)
+
+    try:
+        data = json.loads(request.body)
+
+        # Se for só um objeto, transforma em lista
+        if isinstance(data, dict):
+            data = [data]
+
+        resultados = []
+
+        for aluno in data:
+            username = aluno.get("username")
+            password = aluno.get("password")
+            turmaId = aluno.get("turma")
+
+            if not username or not password or not turmaId:
+                resultados.append({"error": "Campos faltando", "aluno": aluno})
+                continue
+
+            # verificar turma
+            turma = get_object_or_404(Turma, pk=turmaId)
+
+            # verificar duplicado
+            if User.objects.filter(username=username).exists():
+                resultados.append({"error": f"Usuário '{username}' já existe"})
+                continue
+
+            # criar usuário
+            User.objects.create(
+                username=username,
+                password=make_password(password),
+                role=User.Roles.ALUNO,
+                turma=turma,
+                is_staff=False,
+                is_superuser=False
+            )
+
+            resultados.append({"success": f"Aluno '{username}' criado"})
+
+        return JsonResponse({"resultados": resultados})
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
 
 @csrf_exempt
 def mostrar_turmas(request):
