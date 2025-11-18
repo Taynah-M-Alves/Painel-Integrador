@@ -1,8 +1,9 @@
 .App {
   text-align: center;
- background-color: #f0f0f0; /* cinza claro */
-  margin: 0;
+ background-color: rgb(229, 231, 235); /* cinza claro */
+  margin-top: 0px;
   font-family: Arial, sans-serif;
+  border-radius: 0px;
 
 }
 
