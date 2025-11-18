@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     path('', views.criar_visualizar_evento, name="criar_editar_projetos"),
-    # path('<int:id>',views.ver_grupos_por_projeto, name="ver_grupos_projeto" ),
+    path('<int:id>',views.visualizar_evento_by_id, name="ver_evento_id" ),
 ]

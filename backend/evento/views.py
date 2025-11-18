@@ -50,3 +50,25 @@ def criar_visualizar_evento(request):
             return JsonResponse({"erro": str(e)})
     return JsonResponse({"erro":"Metodo solicitado errado! Utilize GET ou POST"},status=400)
 
+@csrf_exempt
+def visualizar_evento_by_id(request, id):
+    if request.method == 'GET':
+        try:
+            evento = get_object_or_404(Evento, pk=id)
+
+            evento_list = {
+                "id": evento.id,
+                "criado":evento.data_criacao,
+                "nome": evento.titulo,
+                "descricao":evento.descricao,
+                "prazo":evento.prazo,
+                "status":evento.status_evento.nome_status,
+            }
+
+            return JsonResponse(evento_list, status=200)
+        
+        except Exception as e:
+            return JsonResponse({"erro": str(e)})
+    return JsonResponse({"erro":"Metodo solicitado errado! Utilize GET ou POST"},status=400)
+
+        

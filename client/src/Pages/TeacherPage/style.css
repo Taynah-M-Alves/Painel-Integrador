@@ -26,7 +26,10 @@
   flex-direction: column;
   justify-content: flex-start;
   text-justify: initial;
+  background-color: #fff;
+  padding: 10px 20px;
 }
+
 
 .title-container {
   display: flex;

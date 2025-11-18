@@ -7,7 +7,7 @@ import CreateGroupModal from '../../components/CreateGroupModal';
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import CreateEventModal from '../../components/CreateEventModal';
-import MetricCard from '../../components/MetricCard';
+// import MetricCard from '../../components/MetricCard';
 import { useGroupsByProject } from '../../Hooks/useGroupsByProject';
 import { useEvents } from '../../Hooks/useEvents';
 
@@ -65,7 +65,7 @@ function TeacherPage() {
           <h3>{project?.professor.nome} - {project?.turma.nome}</h3>
         </div>
 
-        {/* CONTAINER DOS PARAMETROS */}
+        {/* CONTAINER DOS PARAMETROS
         <div className="parameters-container container-md ">
 
           <MetricCard
@@ -100,7 +100,7 @@ function TeacherPage() {
             iconBgColor="bg-blue-50"
           />
 
-        </div>
+        </div> */}
 
         {/* ÁREA DOS GRUPOS */}
         <div className="container-md groups-container">

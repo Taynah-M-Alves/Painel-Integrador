@@ -31,7 +31,7 @@ function CreateGroupModal({ show, handleClose, refreshFunction, titulo, projectI
 
         if (integrantesIds.length < 6) {
             try {
-                const response = await api.post("/grupos", {
+                const response = await api.post("/grupos/", {
                     Nome_Grupo: nome,
                     Projeto_Integrador: projectId,
                     Integrantes: integrantes,
