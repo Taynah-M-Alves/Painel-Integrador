@@ -68,7 +68,7 @@ function TaskModal({ show, handleClose, taskSelected }) {
                         </div>
                         <div>
                             <h6 className="info-label font-semibold text-gray-900 mb-2">Prazo</h6>
-                            <p className="text-gray-600">{new Date(taskSelected?.criado).toLocaleDateString('pt-BR')}</p>
+                            <p className="text-gray-600">{new Date(taskSelected?.prazo).toLocaleDateString('pt-BR')}</p>
                         </div>
                     </div>
 
