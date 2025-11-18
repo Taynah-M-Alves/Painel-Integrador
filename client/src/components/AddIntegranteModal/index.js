@@ -54,7 +54,7 @@ function AddIntegranteModal({ show, handleClose, availableStudants, fetchAvailab
         if (selectedOption === null) {
             selectLider();
 
-        } else {
+        } if (tamanho > 5) {
             console.error("O grupo não pode ter mais de 5 integrantes!")
             alert("O grupo não pode ter mais de 5 integrantes!");
         }

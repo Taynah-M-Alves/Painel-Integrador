@@ -29,6 +29,7 @@ function CreateGroupModal({ show, handleClose, refreshFunction, titulo, projectI
             return;
         }
 
+        console.log("integrantesIds", integrantesIds)
         if (integrantesIds.length < 6) {
             try {
                 const response = await api.post("/grupos/", {

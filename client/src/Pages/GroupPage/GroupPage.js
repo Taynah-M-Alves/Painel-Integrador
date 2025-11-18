@@ -49,7 +49,8 @@ function GroupPage() {
     }
     const handleSaveObjective = () => {
         SetarObjetivo();
-        setEditObjective(false)
+        setEditObjective(false);
+        fetchGroupsId();
     }
 
     console.log("id", group?.id)
@@ -77,7 +78,7 @@ function GroupPage() {
                         <i className="fa-solid fa-pen edit-icon" onClick={handleEditObjective}></i>
                     </div>
                     {editObjective === false ? (
-                        <input class="form-control" type="text" placeholder={group?.Objetivo} aria-label="Disabled input example" disabled />
+                        <input class="form-control" type="text" placeholder={group?.Objetivo ? (group.Objetivo) : ("Campo do objetivo do projeto")} aria-label="Disabled input example" disabled />
                     ) : (
                         <div className="d-flex gap-2">
                             <input
@@ -86,7 +87,10 @@ function GroupPage() {
                                 placeholder="Escreva resumidamente qual o objetivo do seu projeto."
                                 aria-label="Editar objetivo"
                                 value={objetivo}
-                                onChange={(e) => setObjetivo(e.target.value)}
+                                onChange={(e) => {
+                                    setObjetivo(e.target.value)
+                                    fetchGroupsId();
+                                }}
                             />
                             <button type="button" onClick={handleSaveObjective} className="btn btn-primary">
                                 Salvar
@@ -150,14 +154,14 @@ function GroupPage() {
                         />
                         <span>Eventos</span>
                     </label>
-                    <label className="option option-3">
+                    {/* <label className="option option-3">
                         <input type="radio"
                             id="option-3"
                             name="select"
                             onChange={() => setSelectedOption("entregas")}
                         />
                         <span>Entregas</span>
-                    </label>
+                    </label> */}
 
                 </div>
 
@@ -176,9 +180,9 @@ function GroupPage() {
                         />
                     )}
 
-                    {selectedOption === "entregas" && (
+                    {/* {selectedOption === "entregas" && (
                         <h2>Funcionalidade em Desenvolvimento.</h2>
-                    )}
+                    )} */}
                 </div>
             </div>
 

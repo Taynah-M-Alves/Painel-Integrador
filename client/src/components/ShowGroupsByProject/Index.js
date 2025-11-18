@@ -11,8 +11,8 @@ const ShowGroupsByProject = ({ groups }) => {
         <div className='cards container-md'>
             {groups?.length > 0 ? (
                 groups.map((group, index) => (
-                    <div key={index}>
-                        <Card className='Card-box' onClick={() => navigate(`/VerGrupo/${group.id}`)}>
+                    <div key={index} >
+                        <Card className='card-box' onClick={() => navigate(`/VerGrupo/${group.id}`)}>
                             <Card.Body>
                                 <Card.Title>{group.Nome_Grupo}</Card.Title>
                                 <p><i class="fa-solid fa-users"></i> {group.Integrantes?.length} </p>
