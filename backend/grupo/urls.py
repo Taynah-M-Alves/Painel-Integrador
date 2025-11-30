@@ -8,5 +8,5 @@ urlpatterns = [
     path('<int:id>/adicionar-integrante',views.adicionar_integrantes, name="adicionar-integrantes"),
     path('<int:id>/atribuir-lideranca',views.atribuir_lideranca, name="atribuir-lideranca"),
     path('<int:id>/atribuir-objetivo',views.atribuir_objetivo_grupo, name="atribuir-objetivo"),
-    # path('removerIntegrantes/<int:id>',views.RemoverIntegrantesGrupo, name="remover_integrantes" ),
+    path('remover-integrantes/<int:id>',views.remover_integrantes, name="remover_integrantes" ),
 ]

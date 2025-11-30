@@ -170,7 +170,29 @@ def adicionar_integrantes(request, id):
             "Nome do Grupo":grupo.nome_grupo,
             "Integrantes Adicionados": list_adicionados,
         }, status=200)
-    return JsonResponse({"erro": "Método não permitido. Use o método PATCH"}, status=200)
+    return JsonResponse({"erro": "Método não permitido. Use o método PATCH"}, status=500)
+
+
+@csrf_exempt
+def remover_integrantes(request, id):
+
+    if request.method == "PATCH":
+
+        try:
+
+            aluno = get_object_or_404(AlunoProfile, pk=id)
+
+            aluno.grupo = None
+            aluno.save()
+
+            return JsonResponse({"mensagem":"integrante removido com sucesso!"}, status=200)
+        
+        except Exception as e:
+            return JsonResponse({"erro": str(e)}, status=400)
+
+    return JsonResponse({"erro": "Método não permitido. Use o método PATCH"}, status=500)
+        
+
 
 @csrf_exempt
 def atribuir_lideranca(request,id):

@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import Select from 'react-select';
 import api from '../../utilis/Api';
 
-function AddIntegranteModal({ show, handleClose, availableStudants, fetchAvailableStudants, refreshFunction, integrantes, groupID }) {
+function AddIntegranteModal({ show, handleClose, availableStudants, fetchAvailableStudants, refreshFunction, integrantes, groupID, fetchGroup }) {
 
     const [selectedOption, setSelectedOption] = useState(null);
     const [selectedStudents, setSelectedStudents] = useState(null);
@@ -68,6 +68,7 @@ function AddIntegranteModal({ show, handleClose, availableStudants, fetchAvailab
 
         console.log("Resposta completa do backend:", response.data);
 
+        fetchGroup();
 
         handleClose();
 
