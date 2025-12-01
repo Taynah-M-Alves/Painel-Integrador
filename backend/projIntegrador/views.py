@@ -4,6 +4,7 @@ from django.http import JsonResponse, Http404
 from grupo.models import Grupo
 from .serializers import ProjetoSerializer
 from usuarios.models import AlunoProfile, Turma, ProfessorProfile
+from tarefa.models import Tarefa
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -39,7 +40,7 @@ def ver_projeto_por_id(request, id):
 
         professor_data = {"id": professor.id, "nome":professor.user.username} if professor else None
 
-        turma_data = {"id": turma.id, "nome":turma.nome_turma} if turma else None
+        turma_data = {"id": turma.id, "nome":turma.nome_turma} if turma else None        
 
         project_data={
                     "id": project.id,
@@ -69,6 +70,17 @@ def ver_grupos_por_projeto(request, id):
                     {"id": ap.user.id, "nome": ap.user.username} for ap in integrantes
                     ]
                 lider = {"id":gp.lider.id, "nome":gp.lider.user.username} if gp.lider else None
+                
+                #verificando se o grupo tem tarefa atrasada
+
+
+                tarefas_grupo = Tarefa.objects.filter(grupo=gp)
+                tarefas_list= [
+                    {"id": tarefa.id, "statusTarefa": tarefa.status_tarefa.nome_status} for tarefa in tarefas_grupo
+                    ]
+                tem_atraso = tarefas_grupo.filter(
+                status_tarefa__nome_status__in=["Atrasado", "Vencido"]
+                ).exists()
 
 
                 lista_grupo.append({
@@ -77,6 +89,7 @@ def ver_grupos_por_projeto(request, id):
                     "Integrantes": integrantes_list,
                     "Lider":lider,
                     "DataCriacao": gp.data_criacao.strftime("%d/%m/%Y"),
+                    "Atencao": tem_atraso,
                 })
 
             return JsonResponse(lista_grupo, status=200,safe=False)
