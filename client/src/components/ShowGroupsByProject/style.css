@@ -21,3 +21,8 @@
     transform: translateY(-5px);
     box-shadow: 0 8px 14px rgba(0, 0, 0, 0.2);
 }
+
+.card-box.alerta {
+    background-color: rgb(248, 253, 93);
+    color: black;
+}
