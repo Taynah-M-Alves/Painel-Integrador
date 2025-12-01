@@ -15,7 +15,6 @@ export const useHistoryByTask = (taskId) => {
             setHistory(null);
             return;
         }
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
         fetchHistoryByTask();
     }, [taskId])

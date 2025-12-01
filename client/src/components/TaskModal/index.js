@@ -7,7 +7,7 @@ import api from '../../utilis/Api';
 
 function TaskModal({ show, handleClose, taskSelected }) {
 
-    const { history } = useHistoryByTask(taskSelected?.id);
+    const { history, fetchHistoryByTask } = useHistoryByTask(taskSelected?.id);
 
     console.log("historico", history)
     console.log("taskSelected", taskSelected)
@@ -29,6 +29,12 @@ function TaskModal({ show, handleClose, taskSelected }) {
             handleClose();
         }
 
+    }
+
+    const handleFinishTask = async () => {
+        FinishTask();
+        handleClose();
+        fetchHistoryByTask();
     }
 
     return (
@@ -68,7 +74,7 @@ function TaskModal({ show, handleClose, taskSelected }) {
                         </div>
                         <div>
                             <h6 className="info-label font-semibold text-gray-900 mb-2">Prazo</h6>
-                            <p className="text-gray-600">{new Date(taskSelected?.prazo).toLocaleDateString('pt-BR')}</p>
+                            <p className="text-gray-600">{taskSelected?.prazo.split('-').reverse().join('/')}</p>
                         </div>
                     </div>
 
@@ -97,7 +103,7 @@ function TaskModal({ show, handleClose, taskSelected }) {
 
                 </Modal.Body >
                 <Modal.Footer>
-                    <Button variant="primary" onClick={FinishTask} >
+                    <Button variant="primary" onClick={handleFinishTask} >
                         Finalizar Tarefa
                     </Button>
                 </Modal.Footer>

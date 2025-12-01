@@ -79,6 +79,7 @@
 
 
 .aplication-container{
+  min-height: 320px;
     margin-top: 20px;
     background-color: #fff;
     margin-bottom: 20px;

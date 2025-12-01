@@ -28,7 +28,7 @@ const TasksContainer = ({ groupId, integrantes }) => {
 
     return (
         <div>
-            <Button variant="primary" onClick={handleOpenCreateTaskModal}>
+            <Button className='create-task-button' variant="primary" onClick={handleOpenCreateTaskModal}>
                 Criar tarefa
             </Button>
 
